@@ -11,7 +11,8 @@ public class User {
     public User() {
     }
     //N-Arg
-    public User(UUID id, String userName, String email, String pass_hash) {
+    public User(String id, String userName, String email, String pass_hash) {
+
         this.userId = id;
         this.userName = userName;
         this.email = email;
@@ -19,9 +20,8 @@ public class User {
     }
 
     @Id //This Annotation Says this is an ID
-    @GeneratedValue(strategy = GenerationType.UUID) //Creates ID for us, using UUID
-    @Column(name = "userID",updatable = false,nullable = false) //col name from DB, not Updatable, cannot be null
-    private UUID userId;
+    @Column(name = "user_ID",updatable = false,nullable = false) //col name from DB, not Updatable, cannot be null
+    private String userId;
 
     @Column(name = "username",nullable = false)
     private String userName;
@@ -29,13 +29,13 @@ public class User {
     @Column(name = "email",nullable = false)
     private String email;
 
-    @Column(name = "pass_Hash",nullable = false)
+    @Column(name = "pass_hash",nullable = false)
     private String pass_hash;
-    public UUID getId() {
+    public String getId() {
         return userId;
     }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.userId = id;
     }
 

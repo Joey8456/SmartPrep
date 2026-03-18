@@ -1,7 +1,6 @@
 package com.BTA.SmartPrep.domain.entity;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.ManyToAny;
 
 import java.util.Objects;
 import java.util.UUID;
