@@ -1,0 +1,254 @@
+* {
+  box-sizing: border-box;
+}
+
+/* Page background */
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  font-family: Arial, sans-serif;
+  color: #eaf0ff;
+
+  background:
+    radial-gradient(900px 500px at 15% 10%, rgba(124, 92, 255, 0.35), transparent 60%),
+    radial-gradient(900px 500px at 85% 20%, rgba(45, 212, 255, 0.18), transparent 60%),
+    linear-gradient(180deg, #0b1020, #0f1733);
+}
+
+/* Card container */
+.container {
+  width: 100%;
+  max-width: 390px;
+  padding: 30px;
+  border-radius: 18px;
+  background: rgba(18, 26, 51, 0.80);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.45);
+  text-align: center;
+}
+
+/* Header */
+.header h1 {
+  margin: 0;
+  font-size: 30px;
+  letter-spacing: 0.2px;
+}
+
+.subtitle {
+  margin: 10px 0 22px;
+  color: #a9b3d6;
+  line-height: 1.3;
+}
+
+/* Form */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form label {
+  text-align: left;
+  font-size: 0.9rem;
+  color: #a9b3d6;
+  margin-top: 6px;
+}
+
+.form input {
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(10, 14, 28, 0.65);
+  color: #eaf0ff;
+  outline: none;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form input:focus {
+  border-color: rgba(124, 92, 255, 0.90);
+  box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.25);
+}
+
+/* Buttons */
+button {
+  border: none;
+  border-radius: 12px;
+  padding: 12px;
+  cursor: pointer;
+  font-weight: 650;
+  transition: transform 0.08s ease, filter 0.2s ease, background 0.2s ease;
+}
+
+button:active {
+  transform: translateY(1px) scale(0.99);
+}
+
+/* Primary button */
+.primary {
+  margin-top: 10px;
+  color: white;
+  background: linear-gradient(135deg, #7c5cff, #5a8bff);
+}
+
+.primary:hover {
+  filter: brightness(1.05);
+}
+
+/* Secondary buttons */
+.secondary {
+  width: 100%;
+  margin-top: 10px;
+  color: #eaf0ff;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+.secondary:hover {
+  background: rgba(255, 255, 255, 0.09);
+}
+
+/* Divider */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0;
+  color: #a9b3d6;
+  font-size: 0.9rem;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.levelGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.levelBtn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  color: #eaf0ff;
+  padding: 12px 10px;
+  border-radius: 12px;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.08s ease;
+}
+
+.levelBtn:active {
+  transform: translateY(1px) scale(0.99);
+}
+
+.levelBtn:hover {
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.selected {
+  border-color: rgba(124, 92, 255, 0.90);
+  box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.20);
+  background: rgba(124, 92, 255, 0.18);
+}
+
+.card {
+  margin-top: 8px;
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(10, 14, 28, 0.55);
+  text-align: left;
+}
+
+.prompt {
+  margin: 0 0 12px;
+  font-size: 1rem;
+  color: #eaf0ff;
+}
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.choiceBtn {
+  width: 100%;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  color: #eaf0ff;
+  padding: 12px;
+  border-radius: 12px;
+}
+
+.ratingRow {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}
+
+.ratingBtn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  color: #eaf0ff;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 650;
+}
+
+.row {
+  margin-top: 14px;
+  display: flex;
+  gap: 10px;
+}
+
+.row button {
+  flex: 1;
+}
+
+.row button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Questionnaire progress bar */
+.progressWrap {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.progressTrack {
+  flex: 1;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 999px;
+  background: rgba(106, 99, 255, 0.95); /* matches your purple vibe */
+  transition: width 180ms ease;
+}
+
+.progressLabel {
+  min-width: 44px;
+  text-align: right;
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
