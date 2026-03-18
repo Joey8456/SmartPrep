@@ -22,7 +22,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User createUser(CreateUserRequest request) {
         User user = new User(null, request.userName(), request.email(), request.passHash() );
-        return userRepository.save(user);
+        userRepository.insertUser("test", "test@test.com", "123");
+        return user;
     }
 
     @Override

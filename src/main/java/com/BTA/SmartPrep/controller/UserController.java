@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController //Tells spring look at this for API
 @RequestMapping(path = "/api/v1/users")
 public class UserController {

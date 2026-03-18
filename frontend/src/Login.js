@@ -6,7 +6,7 @@ export default function Login({ goToOnboarding }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     setError("");
 
@@ -15,15 +15,31 @@ export default function Login({ goToOnboarding }) {
       return;
     }
 
-    if (!email.includes("@")) {
-      setError("Enter a valid email.");
-      return;
+  try {
+    const res = await fetch("http://localhost:8080/api/v1/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userName: 1,   // temp
+        email: email,
+        passHash: password,
+      }),
+    });
+
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(text);
     }
 
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters.");
-      return;
-    }
+    console.log("User created");
+    goToOnboarding();
+
+  } catch (err) {
+    console.error(err);
+    setError("Failed to connect to server");
+  }
 
     goToOnboarding();
   }
