@@ -1,10 +1,8 @@
 package com.BTA.SmartPrep.domain.entity;
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
-import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "Submissions")
@@ -30,7 +28,6 @@ public class Submission {
     @Column(name = "rating")
     private SolutionRating solutionRating;
 
-    @CreationTimestamp
     @Column(name = "submitted_at", nullable = false)
     private LocalDateTime submittedAt;
 
