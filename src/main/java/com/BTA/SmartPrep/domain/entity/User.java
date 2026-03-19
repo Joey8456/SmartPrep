@@ -11,12 +11,12 @@ public class User {
     public User() {
     }
     //N-Arg
-    public User(String id, String userName, String email, String pass_hash) {
+    public User(String id, String userName, String email, String passhash) {
 
         this.userId = id;
         this.userName = userName;
         this.email = email;
-        this.pass_hash = pass_hash;
+        this.passhash = passhash;
     }
 
     @Id //This Annotation Says this is an ID
@@ -30,7 +30,7 @@ public class User {
     private String email;
 
     @Column(name = "pass_hash",nullable = false)
-    private String pass_hash;
+    private String passhash;
     public String getId() {
         return userId;
     }
@@ -56,11 +56,11 @@ public class User {
     }
 
     public String getPass_hash() {
-        return pass_hash;
+        return passhash;
     }
 
-    public void setPass_hash(String pass_hash) {
-        this.pass_hash = pass_hash;
+    public void setPass_hash(String passhash) {
+        this.passhash = passhash;
     }
 
     @Override // Checks ID To make sure Equal
@@ -81,7 +81,7 @@ public class User {
                 "id=" + userId +
                 ", userName='" + userName + '\'' +
                 ", email='" + email + '\'' +
-                ", pass_hash='" + pass_hash + '\'' +
+                ", passhash='" + passhash + '\'' +
                 '}';
     }
 }

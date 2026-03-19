@@ -16,7 +16,7 @@ public class UserMapperImpl implements UserMapper {
         return new CreateUserRequest(
                 dto.username(),
                 dto.email(),
-                dto.passwordHash()
+                dto.passhash()
         );
     }
 
@@ -25,7 +25,7 @@ public class UserMapperImpl implements UserMapper {
         return new UpdateUserRequest(
                 dto.username(),
                 dto.email(),
-                dto.passwordHash()
+                dto.passhash()
         );
     }
 

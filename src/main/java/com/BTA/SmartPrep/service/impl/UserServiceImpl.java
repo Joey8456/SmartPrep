@@ -21,8 +21,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(CreateUserRequest request) {
-        User user = new User(null, request.userName(), request.email(), request.passHash() );
-        userRepository.insertUser("test", "test@test.com", "123");
+        User user = new User(null, request.username(), request.email(), request.passhash() );
+        userRepository.insertUser(user.getUserName(), user.getEmail(), user.getPass_hash());
         return user;
     }
 
@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
 
         user.setUserName(request.username());
         user.setEmail(request.email());
-        user.setPass_hash(request.passHash());
+        user.setPass_hash(request.passhash());
 
         return userRepository.save(user);
     }

@@ -5,6 +5,6 @@ package com.BTA.SmartPrep.domain.dto;
 public record CreateUserRequestDto(
         String username,
         String email,
-        String passwordHash) {
+        String passhash) {
 
 }

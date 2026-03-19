@@ -22,9 +22,9 @@ export default function Login({ goToOnboarding }) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        userName: 1,   // temp
+        username: "Bruh",   // temp
         email: email,
-        passHash: password,
+        passhash: password,
       }),
     });
 

@@ -2,7 +2,7 @@ package com.BTA.SmartPrep.domain;
 
 //This allows us to create user
 public record CreateUserRequest(
-        String userName,
+        String username,
         String email,
-        String passHash
+        String passhash
 ){}

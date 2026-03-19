@@ -13,8 +13,8 @@ public interface UserRepository extends JpaRepository <User, UUID> {
     @Modifying
     @Transactional
     @Query(value = """
-        INSERT INTO Users (user_ID, username, email, pass_Hash)
-        VALUES (UUID(), :username, :email, :passHash)
+        INSERT INTO Users (user_ID, username, email, passhash)
+        VALUES (UUID(), :username, :email, :pass_hash)
         """, nativeQuery = true)
-    void insertUser(String username, String email, String passHash);
+    void insertUser(String username, String email, String passhash);
 }
