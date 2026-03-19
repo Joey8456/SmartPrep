@@ -22,7 +22,7 @@ export default function Login({ goToOnboarding }) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: "Bruh",   // temp
+        username: email,   // temp
         email: email,
         passhash: password,
       }),
@@ -70,7 +70,7 @@ export default function Login({ goToOnboarding }) {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button className="primary" type="submit">Log In</button>
+        <button className="primary" type="submit">Sign Up</button>
         <p className="error">{error}</p>
       </form>
 
@@ -78,8 +78,6 @@ export default function Login({ goToOnboarding }) {
 
       <button className="secondary" type="button">Continue with Google</button>
       <button className="secondary" type="button">Continue with Apple</button>
-
-      <p className="footer">New here? Create an account</p>
     </main>
   );
 }
