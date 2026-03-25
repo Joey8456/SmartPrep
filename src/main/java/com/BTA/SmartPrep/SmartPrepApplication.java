@@ -8,5 +8,6 @@ public class SmartPrepApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(SmartPrepApplication.class, args);
+        System.out.println("Hello World");
     }
 }
