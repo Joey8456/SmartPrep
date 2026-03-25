@@ -11,6 +11,8 @@ public interface UserService {
 
     User createUser(CreateUserRequest request);
     List<User> listUsers();
-    User updateUser(UUID userId, UpdateUserRequest request);
+
+    //TODO
+//    User updateUser(String userId, UpdateUserRequest request);
 }
 

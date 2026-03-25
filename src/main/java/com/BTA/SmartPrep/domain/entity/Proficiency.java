@@ -70,32 +70,32 @@ public class Proficiency {
     public static class ProficiencyId implements Serializable {
 
         @Column(name = "user_ID", nullable = false)
-        private UUID userId;
+        private String userId;
 
         @Column(name = "category_ID", nullable = false)
-        private UUID categoryId;
+        private int categoryId;
 
         public ProficiencyId() {
         }
 
-        public ProficiencyId(UUID userId, UUID categoryId) {
+        public ProficiencyId(String userId, int categoryId) {
             this.userId = userId;
             this.categoryId = categoryId;
         }
 
-        public UUID getUserId() {
+        public String getUserId() {
             return userId;
         }
 
-        public void setUserId(UUID userId) {
+        public void setUserId(String userId) {
             this.userId = userId;
         }
 
-        public UUID getCategoryId() {
+        public int getCategoryId() {
             return categoryId;
         }
 
-        public void setCategoryId(UUID categoryId) {
+        public void setCategoryId(int categoryId) {
             this.categoryId = categoryId;
         }
 

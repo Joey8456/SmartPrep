@@ -31,15 +31,11 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
-    @Override
-    public User updateUser(UUID user_Id, UpdateUserRequest request) {
-        User user = userRepository.findById(user_Id).orElseThrow(() -> new UserNotFoundException(user_Id));
 
-        user.setUserName(request.username());
-        user.setEmail(request.email());
-        user.setPass_hash(request.passhash());
-
-        return userRepository.save(user);
-    }
+    //TODO
+//    @Override
+//    public User updateUser(String user_Id, UpdateUserRequest request) {
+//
+//    }
 
 }

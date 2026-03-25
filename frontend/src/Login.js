@@ -48,7 +48,7 @@ export default function Login({ goToOnboarding }) {
     <main className="container">
       <header className="header">
         <h1>SmartPrep</h1>
-        <p className="subtitle">Sign in to continue</p>
+        <p className="subtitle">Sign up to continue</p>
       </header>
 
       <form className="form" onSubmit={handleSubmit}>

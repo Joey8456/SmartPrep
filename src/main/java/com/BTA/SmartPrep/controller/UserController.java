@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -48,19 +47,22 @@ public class UserController {
         return ResponseEntity.ok(userDtos);
     }
 
-    @PutMapping(path = "/{userId}")
-    public ResponseEntity<UserDto> updateUser(
-            @PathVariable UUID userId,
-    @RequestBody UpdateUserRequestDto updateUserRequestDto
-    ){
-        UpdateUserRequest updateUserRequest = userMapper.fromDto(updateUserRequestDto);
-        User user= userService.updateUser(userId,updateUserRequest);
-        UserDto userDto = userMapper.toDto(user);
-        return ResponseEntity.ok(userDto);
-    }
+    //TODO implement this
+//    @PutMapping(path = "/{userId}")
+//    public ResponseEntity<UserDto> updateUser(
+//            @PathVariable UUID userId,
+//    @RequestBody UpdateUserRequestDto updateUserRequestDto
+//    ){
+//        UpdateUserRequest updateUserRequest = userMapper.fromDto(updateUserRequestDto);
+//        User user= userService.updateUser(userId,updateUserRequest);
+//        UserDto userDto = userMapper.toDto(user);
+//        return ResponseEntity.ok(userDto);
+//    }
 
 
     //BELOW ARE ALL TESTS.
+
+
     @RestController
     @RequestMapping("/test")
     public class TestController {
