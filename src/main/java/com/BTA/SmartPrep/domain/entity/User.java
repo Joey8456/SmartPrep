@@ -1,5 +1,6 @@
 package com.BTA.SmartPrep.domain.entity;
 import jakarta.persistence.*;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -20,6 +21,8 @@ public class User {
     }
 
     @Id //This Annotation Says this is an ID
+    @GeneratedValue
+    @UuidGenerator
     @Column(name = "user_ID",updatable = false,nullable = false) //col name from DB, not Updatable, cannot be null
     private String userId;
 

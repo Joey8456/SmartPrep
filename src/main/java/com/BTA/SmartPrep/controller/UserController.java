@@ -1,13 +1,16 @@
 package com.BTA.SmartPrep.controller;
 
+import com.BTA.SmartPrep.domain.CreateProfficiencyRequest;
 import com.BTA.SmartPrep.domain.CreateUserRequest;
 import com.BTA.SmartPrep.domain.UpdateUserRequest;
 import com.BTA.SmartPrep.domain.dto.CreateUserRequestDto;
 import com.BTA.SmartPrep.domain.dto.UpdateUserRequestDto;
 import com.BTA.SmartPrep.domain.dto.UserDto;
+import com.BTA.SmartPrep.domain.entity.Proficiency;
 import com.BTA.SmartPrep.domain.entity.User;
 import com.BTA.SmartPrep.mapper.UserMapper;
 import com.BTA.SmartPrep.repository.UserRepository;
+import com.BTA.SmartPrep.service.ProfficiencyService;
 import com.BTA.SmartPrep.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,20 +26,22 @@ public class UserController {
 
     private final UserService userService;
     private final UserMapper userMapper;
+    private final ProfficiencyService profficiencyService;
 
-    public UserController(UserService userService, UserMapper userMapper){
+    public UserController(UserService userService, UserMapper userMapper, ProfficiencyService profficiencyService){
         this.userService = userService;
         this.userMapper = userMapper;
+        this.profficiencyService = profficiencyService;
     }
 //TODO @Valid needed to validate need dependency
 
     @PostMapping
     public ResponseEntity<UserDto> createUser(
             @RequestBody CreateUserRequestDto createUserRequestDto
-    ){
+    ) {
         CreateUserRequest createUserRequest = userMapper.fromDto(createUserRequestDto);
         User user = userService.createUser(createUserRequest);
-        UserDto createdUserDto = userMapper.toDto  (user);
+        UserDto createdUserDto = userMapper.toDto(user);
         return new ResponseEntity<>(createdUserDto, HttpStatus.CREATED);
     }
 
@@ -52,7 +57,7 @@ public class UserController {
 //    public ResponseEntity<UserDto> updateUser(
 //            @PathVariable UUID userId,
 //    @RequestBody UpdateUserRequestDto updateUserRequestDto
-//    ){
+//    )33
 //        UpdateUserRequest updateUserRequest = userMapper.fromDto(updateUserRequestDto);
 //        User user= userService.updateUser(userId,updateUserRequest);
 //        UserDto userDto = userMapper.toDto(user);

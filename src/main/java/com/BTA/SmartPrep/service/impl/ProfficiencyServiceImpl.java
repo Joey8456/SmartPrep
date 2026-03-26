@@ -18,7 +18,9 @@ public class ProfficiencyServiceImpl implements ProfficiencyService {
     public Proficiency createProfficiency(CreateProfficiencyRequest request) {
         Proficiency.ProficiencyId id = new Proficiency.ProficiencyId(request.user_ID(), request.category_ID());
         Proficiency proficiency = new Proficiency(id, request.proficiency());
-        proficiencyRepository.insertProficiency(proficiency.getId().getUserId(),proficiency.getId().getCategoryId(),proficiency.getProficiency());
+        proficiencyRepository.insertProficiency(proficiency.getId().getUserId(),1,1);
+        proficiencyRepository.insertProficiency(proficiency.getId().getUserId(),2,1);
+        proficiencyRepository.insertProficiency(proficiency.getId().getUserId(),3,1);
         return proficiency;
     }
 

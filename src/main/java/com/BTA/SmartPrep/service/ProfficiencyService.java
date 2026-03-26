@@ -8,6 +8,5 @@ import org.hibernate.sql.Update;
 public interface ProfficiencyService {
 
     Proficiency createProfficiency(CreateProfficiencyRequest request);
-
     Proficiency updateProfficiency(String proficiencyId, UpdateProfficiencyRequest request);
 }

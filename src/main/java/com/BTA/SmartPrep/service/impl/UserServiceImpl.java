@@ -1,10 +1,14 @@
 package com.BTA.SmartPrep.service.impl;
 
+import com.BTA.SmartPrep.domain.CreateProfficiencyRequest;
 import com.BTA.SmartPrep.domain.CreateUserRequest;
 import com.BTA.SmartPrep.domain.UpdateUserRequest;
+import com.BTA.SmartPrep.domain.entity.Proficiency;
 import com.BTA.SmartPrep.domain.entity.User;
 import com.BTA.SmartPrep.exception.UserNotFoundException;
+import com.BTA.SmartPrep.repository.ProficiencyRepository;
 import com.BTA.SmartPrep.repository.UserRepository;
+import com.BTA.SmartPrep.service.ProfficiencyService;
 import com.BTA.SmartPrep.service.UserService;
 import org.springframework.stereotype.Service;
 
@@ -14,16 +18,24 @@ import java.util.UUID;
 @Service //Marks UserServiceImpl as a bean, and injects any dependencies needed.
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final ProficiencyRepository proficiencyRepository;
 
-    public UserServiceImpl (UserRepository userRepository){
+    public UserServiceImpl (UserRepository userRepository, ProficiencyRepository proficiencyRepository){
         this.userRepository = userRepository;
+        this.proficiencyRepository = proficiencyRepository;
     }
 
     @Override
     public User createUser(CreateUserRequest request) {
         User user = new User(null, request.username(), request.email(), request.passhash() );
-        userRepository.insertUser(user.getUserName(), user.getEmail(), user.getPass_hash());
-        return user;
+        User savedUser = userRepository.save(user);
+        CreateProfficiencyRequest profficiencyRequest = new CreateProfficiencyRequest(savedUser.getId(), 1, 0);
+        ProfficiencyService profficiencyService = new ProfficiencyServiceImpl(proficiencyRepository);
+        profficiencyService.createProfficiency(profficiencyRequest);
+
+//        userRepository.insertUser(user.getUserName(), user.getEmail(), user.getPass_hash());
+
+        return savedUser;
     }
 
     @Override
