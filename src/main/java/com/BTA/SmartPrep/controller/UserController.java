@@ -36,7 +36,7 @@ public class UserController {
     ){
         CreateUserRequest createUserRequest = userMapper.fromDto(createUserRequestDto);
         User user = userService.createUser(createUserRequest);
-        UserDto createdUserDto = userMapper.toDto(user);
+        UserDto createdUserDto = userMapper.toDto  (user);
         return new ResponseEntity<>(createdUserDto, HttpStatus.CREATED);
     }
 
