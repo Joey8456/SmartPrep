@@ -35,9 +35,7 @@ public class ProfficiencyServiceImpl implements ProfficiencyService {
         Proficiency proficiency = proficiencyRepository
                 .findByIdUserIdAndIdCategoryId(userId, categoryId)
                 .orElseThrow(() -> new RuntimeException("Not found"));
-
         proficiency.setProficiency(request.proficiency());   // or req.proficiency()
-        System.out.println(proficiency);
         return proficiencyRepository.save(proficiency);
     }
 

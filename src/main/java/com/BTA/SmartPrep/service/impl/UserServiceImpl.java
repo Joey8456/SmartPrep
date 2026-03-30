@@ -36,8 +36,6 @@ public class UserServiceImpl implements UserService {
         ProfficiencyService profficiencyService = new ProfficiencyServiceImpl(proficiencyRepository,profficiencyMapper);
         profficiencyService.createProfficiency(profficiencyRequest);
 
-//        userRepository.insertUser(user.getUserName(), user.getEmail(), user.getPass_hash());
-
         return savedUser;
     }
 

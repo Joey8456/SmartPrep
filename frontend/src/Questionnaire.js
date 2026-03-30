@@ -72,12 +72,19 @@ export default function Questionnaire({ questions, goBack, onSubmit }) {
 
     try {
       for (const question of profQuestions) {
-        const proficiency = responses[question.id];
-        console.log(proficiency);
+        let proficiency = responses[question.id];
 
         if (proficiency === undefined) {
           throw new Error(`Missing answer for ${question.id}`);
         }
+
+        // if prof is 1, keep as 1
+        if (proficiency !== 1) {
+          // if prof is 2-5, multiply by 5 then subtract 5 so max is 20
+          proficiency = proficiency * 5 - 5;
+        }
+
+        console.log(proficiency);
 
         const res = await fetch(
           `http://localhost:8080/api/v1/proficiencies/${user.userId}/${question.categoryId}`,
