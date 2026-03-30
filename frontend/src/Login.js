@@ -2,8 +2,9 @@ import "./App.css";
 import { useState } from "react";
 import { useUser } from "./UserContext";
 
-export default function Login({ goToOnboarding }) {
+export default function Login({ goToQuestionnaire }) {
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const { setUser } = useUser();
@@ -12,51 +13,58 @@ export default function Login({ goToOnboarding }) {
     e.preventDefault();
     setError("");
 
-    if (!email || !password) {
-      setError("Please enter email and password.");
+    if (!username || !email || !password) {
+      setError("Please enter username, email, and password.");
       return;
     }
 
-  try {
-   const res = await fetch("http://localhost:8080/api/v1/users", {
-     method: "POST",
-     headers: {
-       "Content-Type": "application/json",
-     },
-     body: JSON.stringify({
-       username: email,
-       email: email,
-       passhash: password,
-     }),
-   });
+    try {
+      const res = await fetch("http://localhost:8080/api/v1/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: username,
+          email: email,
+          passhash: password,
+        }),
+      });
 
-   if (!res.ok) {
-     throw new Error("Failed to create user");
-   }
+      if (!res.ok) {
+        throw new Error("Failed to create user");
+      }
 
-   const createdUser = await res.json();
+      const createdUser = await res.json();
 
-   console.log(createdUser);
-   console.log(createdUser.userId);
-   setUser(createdUser);
-   goToOnboarding();
-
-  } catch (err) {
-    console.error(err);
-    setError("Failed to connect to server");
-  }
-
-    goToOnboarding();
+      console.log(createdUser);
+      console.log(createdUser.userId);
+      setUser(createdUser);
+      goToQuestionnaire();
+      return;
+    } catch (err) {
+      console.error(err);
+      setError("Failed to connect to server");
+    }
   }
 
   return (
     <main className="container">
       <header className="header">
         <h1>SmartPrep</h1>
-        <p className="subtitle">Sign up to continue</p>
+        <p className="subtitle">Create your account to continue</p>
       </header>
 
       <form className="form" onSubmit={handleSubmit}>
+        <label htmlFor="username">Username</label>
+        <input
+          id="username"
+          type="text"
+          placeholder="your username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+
         <label htmlFor="email">Email</label>
         <input
           id="email"

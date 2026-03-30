@@ -1,6 +1,5 @@
 import { useState } from "react";
 import Login from "./Login";
-import Onboarding from "./Onboarding";
 import "./App.css";
 import Questionnaire from "./Questionnaire";
 import { INTAKE_QUESTIONS } from "./Questions";
@@ -15,21 +14,13 @@ function App() {
   return (
     <UserProvider>
       {screen === "login" && (
-        <Login goToOnboarding={() => setScreen("onboarding")} />
-      )}
-
-      {screen === "onboarding" && (
-        <Onboarding
-          goToQuestionnaire={() => setScreen("questionnaire")}
-          goBackToLogin={() => setScreen("login")}
-        />
+        <Login goToQuestionnaire={() => setScreen("questionnaire")} />
       )}
 
       {screen === "questionnaire" && (
         <Questionnaire
           questions={INTAKE_QUESTIONS}
-          goBack={() => setScreen("onboarding")}
-          onSubmit={(payload) => {
+          goBack={() => setScreen("login")}          onSubmit={(payload) => {
             setIntake(payload);
             setScreen("dashboard");
           }}
