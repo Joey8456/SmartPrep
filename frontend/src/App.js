@@ -5,13 +5,15 @@ import "./App.css";
 import Questionnaire from "./Questionnaire";
 import { INTAKE_QUESTIONS } from "./Questions";
 import Dashboard from "./Dashboard";
+import { UserProvider } from "./UserContext";
+
 
 function App() {
   const [screen, setScreen] = useState("login");
   const [intake, setIntake] = useState(null);
 
   return (
-    <>
+    <UserProvider>
       {screen === "login" && (
         <Login goToOnboarding={() => setScreen("onboarding")} />
       )}
@@ -40,7 +42,7 @@ function App() {
           goBackToQuestionnaire={() => setScreen("questionnaire")}
         />
       )}
-    </>
+    </UserProvider>
   );
 }
 

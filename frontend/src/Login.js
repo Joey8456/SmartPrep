@@ -1,10 +1,12 @@
 import "./App.css";
 import { useState } from "react";
+import { useUser } from "./UserContext";
 
 export default function Login({ goToOnboarding }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const { setUser } = useUser();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -16,25 +18,28 @@ export default function Login({ goToOnboarding }) {
     }
 
   try {
-    const res = await fetch("http://localhost:8080/api/v1/users", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: email,   // temp
-        email: email,
-        passhash: password,
-      }),
-    });
+   const res = await fetch("http://localhost:8080/api/v1/users", {
+     method: "POST",
+     headers: {
+       "Content-Type": "application/json",
+     },
+     body: JSON.stringify({
+       username: email,
+       email: email,
+       passhash: password,
+     }),
+   });
 
-    if (!res.ok) {
-      const text = await res.text();
-      throw new Error(text);
-    }
+   if (!res.ok) {
+     throw new Error("Failed to create user");
+   }
 
-    console.log("User created");
-    goToOnboarding();
+   const createdUser = await res.json();
+
+   console.log(createdUser);
+   console.log(createdUser.userId);
+   setUser(createdUser);
+   goToOnboarding();
 
   } catch (err) {
     console.error(err);

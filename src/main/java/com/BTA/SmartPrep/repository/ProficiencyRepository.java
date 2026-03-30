@@ -6,9 +6,11 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import java.util.Optional;
 
 @Repository
 public interface ProficiencyRepository extends JpaRepository<Proficiency, Proficiency.ProficiencyId> {
+    Optional<Proficiency> findByIdUserIdAndIdCategoryId(String userId, int categoryId);
     @Modifying
     @Transactional
     @Query(value = """

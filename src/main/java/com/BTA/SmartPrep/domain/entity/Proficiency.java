@@ -32,8 +32,9 @@ public class Proficiency {
         return id;
     }
 
-    public void setId(ProficiencyId id) {
-        this.id = id;
+    public void setId(String userId, int categoryId) {
+        this.id.userId = userId;
+        this.id.categoryId = categoryId;
     }
 
     public int getProficiency() {

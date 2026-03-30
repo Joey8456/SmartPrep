@@ -6,6 +6,7 @@ import com.BTA.SmartPrep.domain.UpdateUserRequest;
 import com.BTA.SmartPrep.domain.entity.Proficiency;
 import com.BTA.SmartPrep.domain.entity.User;
 import com.BTA.SmartPrep.exception.UserNotFoundException;
+import com.BTA.SmartPrep.mapper.ProfficiencyMapper;
 import com.BTA.SmartPrep.repository.ProficiencyRepository;
 import com.BTA.SmartPrep.repository.UserRepository;
 import com.BTA.SmartPrep.service.ProfficiencyService;
@@ -19,10 +20,12 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final ProficiencyRepository proficiencyRepository;
+    private final ProfficiencyMapper profficiencyMapper;
 
-    public UserServiceImpl (UserRepository userRepository, ProficiencyRepository proficiencyRepository){
+    public UserServiceImpl (UserRepository userRepository, ProficiencyRepository proficiencyRepository,ProfficiencyMapper profficiencyMapper){
         this.userRepository = userRepository;
         this.proficiencyRepository = proficiencyRepository;
+        this. profficiencyMapper = profficiencyMapper;
     }
 
     @Override
@@ -30,7 +33,7 @@ public class UserServiceImpl implements UserService {
         User user = new User(null, request.username(), request.email(), request.passhash() );
         User savedUser = userRepository.save(user);
         CreateProfficiencyRequest profficiencyRequest = new CreateProfficiencyRequest(savedUser.getId(), 1, 0);
-        ProfficiencyService profficiencyService = new ProfficiencyServiceImpl(proficiencyRepository);
+        ProfficiencyService profficiencyService = new ProfficiencyServiceImpl(proficiencyRepository,profficiencyMapper);
         profficiencyService.createProfficiency(profficiencyRequest);
 
 //        userRepository.insertUser(user.getUserName(), user.getEmail(), user.getPass_hash());
@@ -44,7 +47,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    //TODO
+
 //    @Override
 //    public User updateUser(String user_Id, UpdateUserRequest request) {
 //

@@ -18,7 +18,7 @@ public class ProfficiencyMapperImpl implements ProfficiencyMapper {
         return new CreateProfficiencyRequest(
                 dto.user_ID(),
                 dto.category_ID(),
-                dto.proficiency()
+                1
         );
     }
     @Override

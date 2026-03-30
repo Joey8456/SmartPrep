@@ -2,17 +2,23 @@ package com.BTA.SmartPrep.service.impl;
 
 import com.BTA.SmartPrep.domain.CreateProfficiencyRequest;
 import com.BTA.SmartPrep.domain.UpdateProfficiencyRequest;
+import com.BTA.SmartPrep.domain.dto.ProfficiencyDto;
 import com.BTA.SmartPrep.domain.entity.Proficiency;
+import com.BTA.SmartPrep.mapper.ProfficiencyMapper;
 import com.BTA.SmartPrep.repository.ProficiencyRepository;
 import com.BTA.SmartPrep.service.ProfficiencyService;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class ProfficiencyServiceImpl implements ProfficiencyService {
     private final ProficiencyRepository proficiencyRepository;
+    private final ProfficiencyMapper profficiencyMapper;
 
-    public ProfficiencyServiceImpl (ProficiencyRepository proficiencyRepository){
+    public ProfficiencyServiceImpl (ProficiencyRepository proficiencyRepository,ProfficiencyMapper profficiencyMapper){
         this.proficiencyRepository = proficiencyRepository;
+        this.profficiencyMapper = profficiencyMapper;
     }
     @Override
     public Proficiency createProfficiency(CreateProfficiencyRequest request) {
@@ -25,9 +31,25 @@ public class ProfficiencyServiceImpl implements ProfficiencyService {
     }
 
     @Override
-    public Proficiency updateProfficiency(String proficencyId, UpdateProfficiencyRequest request) {
-        return null;
+    public Proficiency updateProfficiency(String userId, int categoryId, UpdateProfficiencyRequest request) {
+        Proficiency proficiency = proficiencyRepository
+                .findByIdUserIdAndIdCategoryId(userId, categoryId)
+                .orElseThrow(() -> new RuntimeException("Not found"));
+
+        proficiency.setProficiency(request.proficiency());   // or req.proficiency()
+        System.out.println(proficiency);
+        return proficiencyRepository.save(proficiency);
     }
+
+    @Override
+    public ProfficiencyDto getProfficiency(String userId, int categoryID) {
+        Proficiency proficiency = proficiencyRepository
+                .findByIdUserIdAndIdCategoryId(userId,categoryID)
+                .orElseThrow(() -> new RuntimeException("Not found"));
+
+        return profficiencyMapper.toDto(proficiency);
+    }
+
 }
 
 //@Service //Marks UserServiceImpl as a bean, and injects any dependencies needed.

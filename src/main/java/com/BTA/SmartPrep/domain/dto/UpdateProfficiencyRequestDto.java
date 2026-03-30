@@ -4,5 +4,8 @@ public record UpdateProfficiencyRequestDto(
         String user_ID,
         int category_ID,
         int proficiency
-) {
+)
+{
+
 }
+
