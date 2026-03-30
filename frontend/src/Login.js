@@ -6,30 +6,48 @@ export default function Login({ goToQuestionnaire }) {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLogin, setIsLogin] = useState(false);
   const { setUser } = useUser();
 
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
+    if (!email || !password || (!isLogin && (!username || !confirmPassword))) {
+      setError("Please fill in all required fields.");
+      return;
+    }
 
-    if (!username || !email || !password) {
-      setError("Please enter username, email, and password.");
+    if (!isLogin && password !== confirmPassword) {
+      setError("Passwords do not match.");
       return;
     }
 
     try {
-      const res = await fetch("http://localhost:8080/api/v1/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: username,
-          email: email,
-          passhash: password,
-        }),
-      });
+      const res = await fetch(
+        isLogin
+          ? "http://localhost:8080/api/v1/users/login"
+          : "http://localhost:8080/api/v1/users",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(
+            isLogin
+              ? {
+                  email: email,
+                  passhash: password,
+                }
+              : {
+                  username: username,
+                  email: email,
+                  passhash: password,
+                }
+          ),
+        }
+      );
 
       if (!res.ok) {
         throw new Error("Failed to create user");
@@ -44,7 +62,7 @@ export default function Login({ goToQuestionnaire }) {
       return;
     } catch (err) {
       console.error(err);
-      setError("Failed to connect to server");
+      setError(err.message || "Failed to connect to server");
     }
   }
 
@@ -52,18 +70,24 @@ export default function Login({ goToQuestionnaire }) {
     <main className="container">
       <header className="header">
         <h1>SmartPrep</h1>
-        <p className="subtitle">Create your account to continue</p>
+        <p className="subtitle">
+          {isLogin ? "Sign in to continue" : "Create your account to continue"}
+        </p>
       </header>
 
       <form className="form" onSubmit={handleSubmit}>
-        <label htmlFor="username">Username</label>
-        <input
-          id="username"
-          type="text"
-          placeholder="your username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
+        {!isLogin && (
+          <>
+            <label htmlFor="username">Username</label>
+            <input
+              id="username"
+              type="text"
+              placeholder="your username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </>
+        )}
 
         <label htmlFor="email">Email</label>
         <input
@@ -82,15 +106,38 @@ export default function Login({ goToQuestionnaire }) {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+        {!isLogin && (
+          <>
+            <label htmlFor="confirmPassword">Confirm Password</label>
+            <input
+              id="confirmPassword"
+              type="password"
+              placeholder="••••••••"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+          </>
+        )}
 
-        <button className="primary" type="submit">Sign Up</button>
+        <button className="primary" type="submit">
+          {isLogin ? "Sign In" : "Sign Up"}
+        </button>
         <p className="error">{error}</p>
       </form>
-
-      <div className="divider"><span>or</span></div>
-
-      <button className="secondary" type="button">Continue with Google</button>
-      <button className="secondary" type="button">Continue with Apple</button>
+      <p style={{ marginTop: "1rem", textAlign: "center" }}>
+        {isLogin ? "Don't have an account?" : "Already have an account?"}
+        <button
+          type="button"
+          className="secondary"
+          onClick={() => {
+            setIsLogin(!isLogin);
+            setError("");
+          }}
+          style={{ marginLeft: "8px" }}
+        >
+          {isLogin ? "Sign Up" : "Sign In"}
+        </button>
+      </p>
     </main>
   );
 }
