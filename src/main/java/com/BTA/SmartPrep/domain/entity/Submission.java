@@ -10,7 +10,7 @@ public class Submission {
     public Submission() {
     }
 
-    public Submission(UUID submissionId, SolutionRating solutionRating, LocalDateTime submittedAt, String answer, User user, Problem problem) {
+    public Submission(String submissionId, SolutionRating solutionRating, LocalDateTime submittedAt, String answer, User user, Problem problem) {
         this.submissionId = submissionId;
         this.solutionRating = solutionRating;
         this.submittedAt = submittedAt;
@@ -22,7 +22,7 @@ public class Submission {
     @Id //This Annotation Says this is an ID
     @GeneratedValue(strategy = GenerationType.UUID) //Creates ID for us, using UUID
     @Column(name = "submission_ID",updatable = false,nullable = false) //col name from DB, not Updatable, cannot be null
-    private UUID submissionId;
+    private String submissionId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "rating")
@@ -42,11 +42,11 @@ public class Submission {
     @JoinColumn(name = "problem_ID")
     private Problem problem;
 
-    public UUID getSubmissionId() {
+    public String getSubmissionId() {
         return submissionId;
     }
 
-    public void setSubmissionId(UUID submissionId) {
+    public void setSubmissionId(String submissionId) {
         this.submissionId = submissionId;
     }
 

@@ -11,7 +11,7 @@ public class Problem {
     public Problem() {
     }
 
-    public Problem(UUID problemId, String title, String prompt, String examples, ProblemDifficulty problemDifficulty, Category category) {
+    public Problem(String problemId, String title, String prompt, String examples, ProblemDifficulty problemDifficulty, Category category) {
         this.problemId = problemId;
         this.title = title;
         this.prompt = prompt;
@@ -23,7 +23,7 @@ public class Problem {
     @Id //This Annotation Says this is an ID
     @GeneratedValue(strategy = GenerationType.UUID) //Creates ID for us, using UUID
     @Column(name = "problem_ID",updatable = false,nullable = false) //col name from DB, not Updatable, cannot be null
-    private UUID problemId;
+    private String problemId;
 
     @Column(name = "pTitle")
     private String title;
@@ -42,11 +42,11 @@ public class Problem {
     @JoinColumn(name = "category_ID")
     private Category category;
 
-    public UUID getProblemId() {
+    public String getProblemId() {
         return problemId;
     }
 
-    public void setProblemId(UUID problemId) {
+    public void setProblemId(String problemId) {
         this.problemId = problemId;
     }
 

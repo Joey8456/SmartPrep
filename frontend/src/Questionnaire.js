@@ -68,12 +68,13 @@ export default function Questionnaire({ questions, goBack, onSubmit }) {
       responses,
     };
 
-    const profQuestions = safeQuestions.filter((question) => question.categoryId != null);
 
+    const profQuestions = safeQuestions.filter((question) => question.categoryId != null);
+    const javaExperience = responses.experience_level;
     try {
       for (const question of profQuestions) {
         let proficiency = responses[question.id];
-
+        console.log("responses:", responses);
         if (proficiency === undefined) {
           throw new Error(`Missing answer for ${question.id}`);
         }
@@ -84,6 +85,12 @@ export default function Questionnaire({ questions, goBack, onSubmit }) {
           proficiency = proficiency * 5 - 5;
         }
 
+        // apply Java experience boost to all proficiencies
+        if (javaExperience === "Intermediate – Comfortable with core Java concepts and basic data structures. Can solve standard problems with minimal guidance.") {
+          proficiency = Math.round(proficiency * 1.25);
+        } else if (javaExperience === "Experienced – Confident writing Java programs and solving intermediate algorithmic problems independently.") {
+          proficiency = Math.round(proficiency * 1.5);
+        }
         console.log(proficiency);
 
         const res = await fetch(
