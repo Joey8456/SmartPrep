@@ -6,6 +6,8 @@ import { INTAKE_QUESTIONS } from "./Questions";
 import Dashboard from "./Dashboard";
 import ProblemPage from "./ProblemPage";
 import ProblemSelection from "./ProblemSelection";
+import { UserProvider } from "./UserContext";
+
 
 function App() {
   const [screen, setScreen] = useState("login");
@@ -13,7 +15,7 @@ function App() {
   const [selectedTopic, setSelectedTopic] = useState("");
 
   return (
-    <>
+    <UserProvider>
       {screen === "login" && (
         <Login
           goToQuestionnaire={() => {
@@ -65,7 +67,7 @@ function App() {
           goBack={() => setScreen("problemSelection")}
         />
       )}
-    </>
+    </UserProvider>
   );
 }
 

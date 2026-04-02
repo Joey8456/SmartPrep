@@ -13,18 +13,21 @@ export const INTAKE_QUESTIONS = [
   {
     id: "topics.arrays_strings",
     type: "rating_1_5",
-    prompt: "Rate your comfort level with Arrays & Strings"
+    prompt: "Rate your comfort level with Arrays & Strings",
+    categoryId: 1
   },
 
   {
     id: "topics.two_pointers",
     type: "rating_1_5",
-    prompt: "Rate your comfort level with Two Pointers"
+    prompt: "Rate your comfort level with Two Pointers",
+    categoryId: 2
   },
 
   {
     id: "topics.hash_maps_sets",
     type: "rating_1_5",
-    prompt: "Rate your comfort level with Hash Maps / Sets"
+    prompt: "Rate your comfort level with Hash Maps / Sets",
+    categoryId: 3
   }
 ];
