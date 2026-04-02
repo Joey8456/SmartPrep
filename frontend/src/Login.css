@@ -8,7 +8,16 @@
 }
 
 .footerText {
-  margin-top: 16px;
+  margin-top: 20px;
+  margin-bottom: 10px;
   color: #eaf0ff;
   text-align: center;
+}
+
+.authSwitch {
+  margin-top: 22px;
+}
+
+.authSwitchBtn {
+  margin-top: 0;
 }

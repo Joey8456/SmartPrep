@@ -1,90 +1,213 @@
+import { useEffect, useState } from "react";
 import "./App.css";
 import "./ProblemPage.css";
+import Editor from "@monaco-editor/react";
 
-export default function ProblemPage({ goBack }) {
+export default function ProblemPage({ topic, goBack }) {
+  const problemData = {
+    "Arrays & Strings": {
+      title: "Two Sum",
+      topicLabel: "Arrays & Strings",
+      difficulty: "Easy",
+      explanation:
+        "Given an array of integers nums and an integer target, return the indices of the two numbers such that they add up to target.",
+      exampleInput: "nums = [2, 7, 11, 15], target = 9",
+      exampleOutput: "[0, 1]",
+      testCases: [
+        "[2,7,11,15], 9 → [0,1]",
+        "[3,2,4], 6 → [1,2]",
+        "[3,3], 6 → [0,1]"
+      ],
+      starterCode: `class Solution {
+    public int[] twoSum(int[] nums, int target) {
+
+    }
+}`
+    },
+
+    "Two Pointers": {
+      title: "Valid Palindrome",
+      topicLabel: "Two Pointers",
+      difficulty: "Easy",
+      explanation:
+        "Given a string s, return true if it is a palindrome after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters.",
+      exampleInput: `s = "A man, a plan, a canal: Panama"`,
+      exampleOutput: "true",
+      testCases: [
+        `"A man, a plan, a canal: Panama" → true`,
+        `"race a car" → false`,
+        `" " → true`
+      ],
+      starterCode: `class Solution {
+    public boolean isPalindrome(String s) {
+
+    }
+}`
+    },
+
+    "Hash Maps": {
+      title: "Contains Duplicate",
+      topicLabel: "Hash Maps",
+      difficulty: "Easy",
+      explanation:
+        "Given an integer array nums, return true if any value appears at least twice in the array, and return false if every element is distinct.",
+      exampleInput: "nums = [1, 2, 3, 1]",
+      exampleOutput: "true",
+      testCases: [
+        "[1,2,3,1] → true",
+        "[1,2,3,4] → false",
+        "[1,1,1,3,3,4,3,2,4,2] → true"
+      ],
+      starterCode: `class Solution {
+    public boolean containsDuplicate(int[] nums) {
+
+    }
+}`
+    }
+  };
+
+  const currentProblem =
+    problemData[topic] || problemData["Arrays & Strings"];
+
+  const [code, setCode] = useState(currentProblem.starterCode);
+  const [output, setOutput] = useState("Output will appear here when submitted.");
+  const [resultStatus, setResultStatus] = useState(null); // "red" | "yellow" | "green" | null
+
+  useEffect(() => {
+    setCode(currentProblem.starterCode);
+    setOutput("Output will appear here when submitted.");
+    setResultStatus(null);
+  }, [topic, currentProblem.starterCode]);
+
+  function handleSubmit() {
+    const trimmedCode = code.trim();
+    const starterTrimmed = currentProblem.starterCode.trim();
+
+    if (!trimmedCode || trimmedCode === starterTrimmed) {
+      setResultStatus("red");
+      setOutput("❌ Submission incomplete. You need to add more code before submitting.");
+      return;
+    }
+
+    const hasReturn = trimmedCode.includes("return");
+    const hasLoop =
+      trimmedCode.includes("for") ||
+      trimmedCode.includes("while");
+    const hasIf = trimmedCode.includes("if");
+    const hasMap =
+      trimmedCode.includes("HashMap") ||
+      trimmedCode.includes("HashSet") ||
+      trimmedCode.includes("Map") ||
+      trimmedCode.includes("Set");
+    const hasTwoPointerHints =
+      trimmedCode.includes("left") ||
+      trimmedCode.includes("right") ||
+      trimmedCode.includes("charAt");
+    const hasLength = trimmedCode.length > starterTrimmed.length + 20;
+
+    const strengthScore = [
+      hasReturn,
+      hasLoop,
+      hasIf,
+      hasMap,
+      hasTwoPointerHints,
+      hasLength
+    ].filter(Boolean).length;
+
+    if (strengthScore >= 3) {
+      setResultStatus("green");
+      setOutput("✅ Demo result: submission looks strong. Most test cases would likely pass.");
+    } else {
+      setResultStatus("yellow");
+      setOutput("⚠️ Demo result: good start, but the solution may still be incomplete.");
+    }
+  }
+
   return (
-    <main className="problem-page-shell">
-      <div className="problem-top-nav">
-        <div className="problem-brand">SmartPrep</div>
+    <main className="workspace-shell">
+      <div className="workspace-layout">
+        <section className="workspace-left">
+          <div className="workspace-card">
+            <div className="problem-title-row">
+              <div>
+                <h2>{currentProblem.title}</h2>
+                <div className="topic-pill">{currentProblem.topicLabel}</div>
+              </div>
 
-        <div className="problem-nav-tabs">
-          <button className="problem-tab active" type="button">
-            Problem
-          </button>
-          <button className="problem-tab" type="button">
-            Help
-          </button>
-          <button className="problem-tab" type="button">
-            Code
-          </button>
-        </div>
-      </div>
+              <span className="difficulty-badge easy">
+                {currentProblem.difficulty}
+              </span>
+            </div>
 
-      <div className="problem-layout">
-        <section className="problem-panel left-panel">
-          <div className="problem-title-row">
-            <h2>Two Sum</h2>
-            <span className="difficulty-badge easy">Easy</span>
-          </div>
+            <div className="workspace-section">
+              <h3>Problem Explanation</h3>
+              <p>{currentProblem.explanation}</p>
+            </div>
 
-          <div className="topic-pill">Arrays & Strings</div>
+            <div className="workspace-section">
+              <h3>Example</h3>
+              <p>
+                <strong>Input:</strong> {currentProblem.exampleInput}
+              </p>
+              <p>
+                <strong>Output:</strong> {currentProblem.exampleOutput}
+              </p>
+            </div>
 
-          <div className="problem-section">
-            <h3>Problem Description</h3>
-            <p>
-              Given an array of integers <strong>nums</strong> and an integer{" "}
-              <strong>target</strong>, return indices of the two numbers such
-              that they add up to target.
-            </p>
-          </div>
-
-          <div className="problem-section">
-            <h3>Example</h3>
-            <p>
-              <strong>Input:</strong> nums = [2, 7, 11, 15], target = 9
-            </p>
-            <p>
-              <strong>Output:</strong> [0, 1]
-            </p>
-          </div>
-
-          <div className="constraint-box">
-            <strong>Constraints:</strong> 2 ≤ nums.length ≤ 10⁴ • Only one valid answer exists
+            <div className="workspace-section">
+              <h3>Test Cases</h3>
+              <ul className="test-case-list">
+                {currentProblem.testCases.map((testCase, index) => (
+                  <li key={index}>{testCase}</li>
+                ))}
+              </ul>
+            </div>
           </div>
         </section>
 
-        <section className="problem-panel right-panel">
-          <div className="editor-topbar">
-            <span className="editor-file">solution.java</span>
+        <section className="workspace-right">
+          <div className="editor-card">
+            <div className="editor-topbar">
+              <span>solution.java</span>
 
-            <div className="editor-dots">
-              <span className="dot red"></span>
-              <span className="dot yellow"></span>
-              <span className="dot green"></span>
+              <div className="editor-status-dots">
+                <span className={`status-dot red ${resultStatus === "red" ? "active-red" : ""}`}></span>
+                <span className={`status-dot yellow ${resultStatus === "yellow" ? "active-yellow" : ""}`}></span>
+                <span className={`status-dot green ${resultStatus === "green" ? "active-green" : ""}`}></span>
+              </div>
+            </div>
+
+            <div className="editor-wrapper">
+              <Editor
+                height="420px"
+                defaultLanguage="java"
+                value={code}
+                onChange={(value) => setCode(value || "")}
+                theme="vs-dark"
+                options={{
+                  minimap: { enabled: false },
+                  fontSize: 15,
+                  scrollBeyondLastLine: false,
+                  wordWrap: "on",
+                  padding: { top: 16 }
+                }}
+              />
+            </div>
+
+            <div className="editor-actions">
+              <button className="primary" type="button" onClick={handleSubmit}>
+                Submit
+              </button>
+
+              <button className="secondary" type="button" onClick={goBack}>
+                Back
+              </button>
             </div>
           </div>
 
-          <div className="code-area">
-            <pre>{`class Solution {
-    public int[] twoSum(int[] nums, int target) {
-        // Write your solution here
-
-    }
-}`}</pre>
-          </div>
-
-          <div className="editor-actions">
-            <button className="run-btn" type="button">Run</button>
-            <button className="submit-btn" type="button">Submit</button>
-            <button className="hint-btn" type="button">Hint</button>
-
-            <button
-              className="back-dashboard-btn"
-              type="button"
-              onClick={goBack}
-            >
-              Back
-            </button>
+          <div className="output-card">
+            <h3>Output</h3>
+            <p>{output}</p>
           </div>
         </section>
       </div>

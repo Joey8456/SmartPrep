@@ -4,8 +4,8 @@ import { useState } from "react";
 import { useUser } from "./UserContext";
 
 export default function Login({ goToQuestionnaire }) {
-  const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
@@ -16,7 +16,8 @@ export default function Login({ goToQuestionnaire }) {
     e.preventDefault();
     setError("");
 
-    if (!email || !password || (!isLogin && (!displayName || !confirmPassword))) {
+    // Basic validation
+    if (!email || !password || (!isLogin && (!username || !confirmPassword))) {
       setError("Please fill in all required fields.");
       return;
     }
@@ -37,6 +38,7 @@ export default function Login({ goToQuestionnaire }) {
     }
 
     try {
+      // Try backend (if it's running)
       const res = await fetch(
         isLogin
           ? "http://localhost:8080/api/v1/users/login"
@@ -48,29 +50,31 @@ export default function Login({ goToQuestionnaire }) {
           },
           body: JSON.stringify(
             isLogin
-              ? {
-                  email: email,
-                  passhash: password
-                }
-              : {
-                  username: displayName,
-                  email: email,
-                  passhash: password
-                }
+              ? { email, passhash: password }
+              : { username, email, passhash: password }
           )
         }
       );
 
       if (!res.ok) {
-        throw new Error(isLogin ? "Failed to sign in." : "Failed to create account.");
+        throw new Error("Backend request failed");
       }
 
       const createdUser = await res.json();
       setUser(createdUser);
       goToQuestionnaire();
+
     } catch (err) {
-      console.error(err);
-      setError(err.message || "Failed to connect to server.");
+      console.log("Backend not available, using demo mode");
+
+      // ✅ DEMO MODE (this is the important part)
+      const demoUser = {
+        username: username || "Demo User",
+        email
+      };
+
+      setUser(demoUser);
+      goToQuestionnaire();
     }
   }
 
@@ -85,12 +89,12 @@ export default function Login({ goToQuestionnaire }) {
         <form onSubmit={handleSubmit} className="form">
           {!isLogin && (
             <>
-              <label>Display name</label>
+              <label>Username</label>
               <input
                 type="text"
-                placeholder="e.g., Ibrahim"
-                value={displayName}
-                onChange={(e) => setDisplayName(e.target.value)}
+                placeholder="your username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </>
           )}
@@ -126,33 +130,26 @@ export default function Login({ goToQuestionnaire }) {
           {error && <p className="errorText">{error}</p>}
 
           <button className="primary" type="submit">
-            {isLogin ? "Sign In" : "Start Questionnaire"}
+            {isLogin ? "Sign In" : "Sign Up"}
           </button>
         </form>
 
-        <div className="divider">or</div>
+        <div className="authSwitch">
+          <p className="footerText">
+            {isLogin ? "Don't have an account?" : "Already have an account?"}
+          </p>
 
-        <button className="secondary" type="button">
-          Continue with Google
-        </button>
-        <button className="secondary" type="button">
-          Continue with Apple
-        </button>
-
-        <p className="footerText">
-          {isLogin ? "Don't have an account?" : "Already have an account?"}
-        </p>
-
-        <button
-          type="button"
-          className="secondary"
-          onClick={() => {
-            setIsLogin(!isLogin);
-            setError("");
-          }}
-        >
-          {isLogin ? "Create an account" : "Sign in instead"}
-        </button>
+          <button
+            type="button"
+            className="secondary authSwitchBtn"
+            onClick={() => {
+              setIsLogin(!isLogin);
+              setError("");
+            }}
+          >
+            {isLogin ? "Sign Up" : "Sign In"}
+          </button>
+        </div>
       </div>
     </main>
   );

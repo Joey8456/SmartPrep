@@ -1,112 +1,60 @@
-/* =========================
-   Problem Page Shell
-========================= */
-
-.problem-page-shell {
+.workspace-shell {
   min-height: 100vh;
-  padding: 8px 0 24px;
-  color: #eef2ff;
+  padding: 24px;
 }
 
-/* =========================
-   Top Navigation
-========================= */
-
-.problem-top-nav {
-  max-width: 1280px;
-  margin: 0 auto 18px auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: rgba(18, 26, 51, 0.82);
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  border-radius: 16px;
-  padding: 12px 18px;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.35);
-}
-
-.problem-brand {
-  font-size: 20px;
-  font-weight: 700;
-  color: #8d7cff;
-}
-
-.problem-nav-tabs {
-  display: flex;
-  gap: 10px;
-}
-
-.problem-tab {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  color: #dfe6ff;
-  border-radius: 10px;
-  padding: 10px 18px;
-  font-weight: 650;
-}
-
-.problem-tab.active {
-  background: linear-gradient(135deg, #7c5cff, #5a8bff);
-  border: none;
-  color: white;
-}
-
-/* =========================
-   Main Two-Column Layout
-========================= */
-
-.problem-layout {
-  max-width: 1280px;
+.workspace-layout {
+  max-width: 1400px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1fr 1.15fr;
+  grid-template-columns: 0.95fr 1.35fr;
   gap: 18px;
-  align-items: stretch;
 }
 
-/* =========================
-   Shared Problem Panels
-========================= */
+.workspace-left,
+.workspace-right {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
 
-.problem-panel {
+.workspace-card,
+.editor-card,
+.output-card {
   background: rgba(18, 26, 51, 0.82);
-  border: 1px solid rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 18px;
   backdrop-filter: blur(10px);
   box-shadow: 0 10px 35px rgba(0, 0, 0, 0.45);
 }
 
-.left-panel {
+.workspace-card {
   padding: 24px;
-  display: flex;
-  flex-direction: column;
   min-height: 650px;
 }
-
-.right-panel {
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  min-height: 650px;
-  overflow: hidden;
-}
-
-/* =========================
-   Left Panel Content
-========================= */
 
 .problem-title-row {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
-  margin-bottom: 14px;
+  margin-bottom: 20px;
 }
 
 .problem-title-row h2 {
-  margin: 0;
+  margin: 0 0 10px;
   font-size: 34px;
+}
+
+.topic-pill {
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(124, 92, 255, 0.65);
+  color: #b9adff;
+  background: rgba(124, 92, 255, 0.1);
+  font-size: 14px;
+  font-weight: 650;
 }
 
 .difficulty-badge {
@@ -121,166 +69,110 @@
   color: white;
 }
 
-.topic-pill {
-  display: inline-block;
-  width: fit-content;
-  margin-bottom: 24px;
-  padding: 8px 14px;
-  border-radius: 10px;
-  border: 1px solid rgba(124, 92, 255, 0.65);
-  color: #b9adff;
-  background: rgba(124, 92, 255, 0.10);
-  font-size: 14px;
-  font-weight: 650;
-}
-
-.problem-section {
+.workspace-section {
   margin-bottom: 28px;
 }
 
-.problem-section h3 {
+.workspace-section h3 {
   margin: 0 0 12px;
   color: #23d2da;
   font-size: 20px;
 }
 
-.problem-section p {
-  margin: 0 0 12px;
+.workspace-section p,
+.workspace-section li {
   color: #dbe5ff;
   line-height: 1.6;
   font-size: 16px;
 }
 
-.constraint-box {
-  margin-top: auto;
-  background: rgba(10, 14, 28, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  border-radius: 14px;
-  padding: 14px 16px;
-  color: #d6def8;
-  font-size: 14px;
+.test-case-list {
+  margin: 0;
+  padding-left: 20px;
 }
 
-/* =========================
-   Right Panel / Editor
-========================= */
+.editor-card {
+  overflow: hidden;
+}
 
 .editor-topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   padding: 14px 18px;
-  background: rgba(10, 14, 28, 0.70);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.editor-file {
-  color: #9eb0e1;
-  font-size: 14px;
+  background: rgba(10, 14, 28, 0.65);
+  color: #dbe5ff;
   font-weight: 600;
 }
 
-.editor-dots {
-  display: flex;
-  gap: 8px;
-}
-
-.dot {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-}
-
-.dot.red {
-  background: #ff4d4f;
-}
-
-.dot.yellow {
-  background: #f5a623;
-}
-
-.dot.green {
-  background: #22c55e;
-}
-
-.code-area {
-  flex: 1;
-  background: rgba(5, 10, 20, 0.94);
-  padding: 24px;
-  overflow: auto;
-}
-
-.code-area pre {
-  margin: 0;
-  color: #d9f8e8;
-  font-size: 15px;
-  line-height: 1.75;
-  font-family: "Courier New", monospace;
-  white-space: pre-wrap;
+.editor-wrapper {
+  overflow: hidden;
 }
 
 .editor-actions {
   display: flex;
-  gap: 14px;
+  gap: 12px;
+  padding: 16px;
+}
+
+.output-card {
   padding: 18px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(10, 14, 28, 0.55);
+  min-height: 140px;
 }
 
-.run-btn,
-.submit-btn,
-.hint-btn,
-.back-dashboard-btn {
-  border-radius: 12px;
-  padding: 12px 22px;
-  font-weight: 700;
-  cursor: pointer;
+.output-card h3 {
+  margin-top: 0;
+  color: #23d2da;
 }
 
-.run-btn {
-  background: transparent;
-  border: 2px solid #12b76a;
-  color: #34d399;
-}
-
-.submit-btn {
-  background: linear-gradient(135deg, #7c5cff, #5a8bff);
-  color: white;
-  border: none;
-}
-
-.hint-btn {
-  background: transparent;
-  border: 2px solid #d18a10;
-  color: #ffcf70;
-}
-
-.back-dashboard-btn {
-  background: rgba(255, 255, 255, 0.06);
-  color: #eef2ff;
-  border: 1px solid rgba(255, 255, 255, 0.10);
-}
-
-/* =========================
-   Responsive
-========================= */
-
-@media (max-width: 980px) {
-  .problem-layout {
+@media (max-width: 1000px) {
+  .workspace-layout {
     grid-template-columns: 1fr;
   }
 
-  .left-panel,
-  .right-panel {
+  .workspace-card {
     min-height: auto;
   }
+}
 
-  .problem-title-row {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+.editor-status-dots {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
 
-  .editor-actions {
-    flex-wrap: wrap;
-  }
+.status-dot {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  opacity: 0.45;
+  transition: all 0.2s ease;
+}
+
+.status-dot.red {
+  background: #ff4d4f;
+}
+
+.status-dot.yellow {
+  background: #f5a623;
+}
+
+.status-dot.green {
+  background: #22c55e;
+}
+
+.active-red {
+  opacity: 1;
+  box-shadow: 0 0 10px #ff4d4f, 0 0 20px #ff4d4f;
+  transform: scale(1.12);
+}
+
+.active-yellow {
+  opacity: 1;
+  box-shadow: 0 0 10px #f5a623, 0 0 20px #f5a623;
+  transform: scale(1.12);
+}
+
+.active-green {
+  opacity: 1;
+  box-shadow: 0 0 10px #22c55e, 0 0 20px #22c55e;
+  transform: scale(1.12);
 }
