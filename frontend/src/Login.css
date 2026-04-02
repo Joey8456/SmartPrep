@@ -1,0 +1,14 @@
+.loginCard {
+  text-align: left;
+}
+
+.loginCard h1,
+.loginCard .subtitle {
+  text-align: center;
+}
+
+.footerText {
+  margin-top: 16px;
+  color: #eaf0ff;
+  text-align: center;
+}

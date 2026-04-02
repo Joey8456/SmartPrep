@@ -1,17 +1,20 @@
 import "./App.css";
+import "./Login.css";
 import { useState } from "react";
 
-export default function Login({ goToOnboarding }) {
+export default function Login({ goToQuestionnaire }) {
+  const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
     setError("");
 
-    if (!email || !password) {
-      setError("Please enter email and password.");
+    if (!email || !password || !confirmPassword) {
+      setError("Please enter email, password, and confirm password.");
       return;
     }
 
@@ -25,45 +28,74 @@ export default function Login({ goToOnboarding }) {
       return;
     }
 
-    goToOnboarding();
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    goToQuestionnaire({
+      display_name: displayName,
+      email
+    });
   }
 
   return (
     <main className="container">
-      <header className="header">
+      <div className="card loginCard">
         <h1>SmartPrep</h1>
         <p className="subtitle">Sign in to continue</p>
-      </header>
 
-      <form className="form" onSubmit={handleSubmit}>
-        <label htmlFor="email">Email</label>
-        <input
-          id="email"
-          type="email"
-          placeholder="you@example.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        <form onSubmit={handleSubmit} className="form">
+          <label>Display name (optional)</label>
+          <input
+            type="text"
+            placeholder="e.g., Ibrahim"
+            value={displayName}
+            onChange={(e) => setDisplayName(e.target.value)}
+          />
 
-        <label htmlFor="password">Password</label>
-        <input
-          id="password"
-          type="password"
-          placeholder="••••••••"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+          <label>Email</label>
+          <input
+            type="email"
+            placeholder="you@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-        <button className="primary" type="submit">Log In</button>
-        <p className="error">{error}</p>
-      </form>
+          <label>Password</label>
+          <input
+            type="password"
+            placeholder="••••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-      <div className="divider"><span>or</span></div>
+          <label>Confirm Password</label>
+          <input
+            type="password"
+            placeholder="••••••••"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
 
-      <button className="secondary" type="button">Continue with Google</button>
-      <button className="secondary" type="button">Continue with Apple</button>
+          {error && <p className="errorText">{error}</p>}
 
-      <p className="footer">New here? Create an account</p>
+          <button className="primary" type="submit">
+            Start Questionnaire
+          </button>
+        </form>
+
+        <div className="divider">or</div>
+
+        <button className="secondary" type="button">
+          Continue with Google
+        </button>
+        <button className="secondary" type="button">
+          Continue with Apple
+        </button>
+
+        <p className="footerText">New here? Create an account</p>
+      </div>
     </main>
   );
 }

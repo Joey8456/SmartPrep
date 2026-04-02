@@ -1,34 +1,37 @@
 import { useState } from "react";
 import Login from "./Login";
-import Onboarding from "./Onboarding";
 import "./App.css";
 import Questionnaire from "./Questionnaire";
 import { INTAKE_QUESTIONS } from "./Questions";
 import Dashboard from "./Dashboard";
+import ProblemPage from "./ProblemPage";
 
 function App() {
   const [screen, setScreen] = useState("login");
+  const [profile, setProfile] = useState({});
   const [intake, setIntake] = useState(null);
 
   return (
     <>
       {screen === "login" && (
-        <Login goToOnboarding={() => setScreen("onboarding")} />
-      )}
-
-      {screen === "onboarding" && (
-        <Onboarding
-          goToQuestionnaire={() => setScreen("questionnaire")}
-          goBackToLogin={() => setScreen("login")}
+        <Login
+          goToQuestionnaire={(profileData) => {
+            setProfile(profileData);
+            setScreen("questionnaire");
+          }}
         />
       )}
 
       {screen === "questionnaire" && (
         <Questionnaire
           questions={INTAKE_QUESTIONS}
-          goBack={() => setScreen("onboarding")}
+          goBack={() => setScreen("login")}
           onSubmit={(payload) => {
-            setIntake(payload);
+            const fullPayload = {
+              ...payload,
+              profile
+            };
+            setIntake(fullPayload);
             setScreen("dashboard");
           }}
         />
@@ -38,7 +41,12 @@ function App() {
         <Dashboard
           intake={intake}
           goBackToQuestionnaire={() => setScreen("questionnaire")}
+          goToProblemPage={() => setScreen("ProblemPage")}
         />
+      )}
+
+      {screen === "ProblemPage" && (
+        <ProblemPage goBack={() => setScreen("dashboard")} />
       )}
     </>
   );
