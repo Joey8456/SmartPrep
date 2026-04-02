@@ -1,6 +1,7 @@
 import "./App.css";
 import "./Login.css";
 import { useState } from "react";
+import { useUser } from "./UserContext";
 
 export default function Login({ goToQuestionnaire }) {
   const [displayName, setDisplayName] = useState("");
@@ -8,13 +9,15 @@ export default function Login({ goToQuestionnaire }) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLogin, setIsLogin] = useState(false);
+  const { setUser } = useUser();
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     setError("");
 
-    if (!email || !password || !confirmPassword) {
-      setError("Please enter email, password, and confirm password.");
+    if (!email || !password || (!isLogin && (!displayName || !confirmPassword))) {
+      setError("Please fill in all required fields.");
       return;
     }
 
@@ -28,31 +31,69 @@ export default function Login({ goToQuestionnaire }) {
       return;
     }
 
-    if (password !== confirmPassword) {
+    if (!isLogin && password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
     }
 
-    goToQuestionnaire({
-      display_name: displayName,
-      email
-    });
+    try {
+      const res = await fetch(
+        isLogin
+          ? "http://localhost:8080/api/v1/users/login"
+          : "http://localhost:8080/api/v1/users",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(
+            isLogin
+              ? {
+                  email: email,
+                  passhash: password
+                }
+              : {
+                  username: displayName,
+                  email: email,
+                  passhash: password
+                }
+          )
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error(isLogin ? "Failed to sign in." : "Failed to create account.");
+      }
+
+      const createdUser = await res.json();
+      setUser(createdUser);
+      goToQuestionnaire();
+    } catch (err) {
+      console.error(err);
+      setError(err.message || "Failed to connect to server.");
+    }
   }
 
   return (
     <main className="container">
       <div className="card loginCard">
         <h1>SmartPrep</h1>
-        <p className="subtitle">Sign in to continue</p>
+        <p className="subtitle">
+          {isLogin ? "Sign in to continue" : "Create your account to continue"}
+        </p>
 
         <form onSubmit={handleSubmit} className="form">
-          <label>Display name (optional)</label>
-          <input
-            type="text"
-            placeholder="e.g., Ibrahim"
-            value={displayName}
-            onChange={(e) => setDisplayName(e.target.value)}
-          />
+          {!isLogin && (
+            <>
+              <label>Display name</label>
+              <input
+                type="text"
+                placeholder="e.g., Ibrahim"
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+              />
+            </>
+          )}
 
           <label>Email</label>
           <input
@@ -70,18 +111,22 @@ export default function Login({ goToQuestionnaire }) {
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          <label>Confirm Password</label>
-          <input
-            type="password"
-            placeholder="••••••••"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
+          {!isLogin && (
+            <>
+              <label>Confirm Password</label>
+              <input
+                type="password"
+                placeholder="••••••••"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+            </>
+          )}
 
           {error && <p className="errorText">{error}</p>}
 
           <button className="primary" type="submit">
-            Start Questionnaire
+            {isLogin ? "Sign In" : "Start Questionnaire"}
           </button>
         </form>
 
@@ -94,7 +139,20 @@ export default function Login({ goToQuestionnaire }) {
           Continue with Apple
         </button>
 
-        <p className="footerText">New here? Create an account</p>
+        <p className="footerText">
+          {isLogin ? "Don't have an account?" : "Already have an account?"}
+        </p>
+
+        <button
+          type="button"
+          className="secondary"
+          onClick={() => {
+            setIsLogin(!isLogin);
+            setError("");
+          }}
+        >
+          {isLogin ? "Create an account" : "Sign in instead"}
+        </button>
       </div>
     </main>
   );

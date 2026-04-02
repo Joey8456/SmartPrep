@@ -15,8 +15,7 @@ function App() {
     <>
       {screen === "login" && (
         <Login
-          goToQuestionnaire={(profileData) => {
-            setProfile(profileData);
+          goToQuestionnaire={() => {
             setScreen("questionnaire");
           }}
         />
