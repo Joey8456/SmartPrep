@@ -1,0 +1,97 @@
+.levelGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.levelBtn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  color: #eaf0ff;
+  padding: 12px 10px;
+  border-radius: 12px;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.08s ease;
+}
+
+.levelBtn:active {
+  transform: translateY(1px) scale(0.99);
+}
+
+.levelBtn:hover {
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.selected {
+  border-color: rgba(124, 92, 255, 0.90);
+  box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.20);
+  background: rgba(124, 92, 255, 0.18);
+}
+
+.prompt {
+  margin: 0 0 12px;
+  font-size: 1rem;
+  color: #eaf0ff;
+}
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.choiceBtn {
+  width: 100%;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  color: #eaf0ff;
+  padding: 12px;
+  border-radius: 12px;
+}
+
+.ratingRow {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}
+
+.ratingBtn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  color: #eaf0ff;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 650;
+}
+
+.progressWrap {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.progressTrack {
+  flex: 1;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 999px;
+  background: rgba(106, 99, 255, 0.95);
+  transition: width 180ms ease;
+}
+
+.progressLabel {
+  min-width: 44px;
+  text-align: right;
+  font-size: 0.9rem;
+  opacity: 0.85;
+}

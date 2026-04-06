@@ -1,13 +1,15 @@
 import "./App.css";
 
-export default function Dashboard({ intake, goBackToQuestionnaire }) {
+export default function Dashboard({ intake, goBackToQuestionnaire, goToProblemPage }) {
   const topics = intake?.responses?.topics || {};
-  const entries = Object.entries(topics); // [ ["arrays_strings", 3], ... ]
+  const entries = Object.entries(topics);
 
   // Find weakest topic (lowest rating)
   let weakest = null;
   for (const [k, v] of entries) {
-    if (weakest === null || v < weakest.value) weakest = { key: k, value: v };
+    if (weakest === null || v < weakest.value) {
+      weakest = { key: k, value: v };
+    }
   }
 
   const niceName = (key) => {
@@ -23,7 +25,7 @@ export default function Dashboard({ intake, goBackToQuestionnaire }) {
     <main className="container">
       <header className="header">
         <h1>SmartPrep</h1>
-        <p className="subtitle">Dashboard (Sprint 2 Demo)</p>
+        <p className="subtitle">Dashboard</p>
       </header>
 
       <div className="card">
@@ -50,10 +52,21 @@ export default function Dashboard({ intake, goBackToQuestionnaire }) {
           <strong>Recommended next topic:</strong>{" "}
           {weakest ? `${niceName(weakest.key)} (${weakest.value}/5)` : "—"}
         </p>
+
+        {/* ✅ NEW BUTTON */}
+        <div style={{ marginTop: "20px" }}>
+          <button className="primary-btn" onClick={goToProblemPage}>
+            Start Practice
+          </button>
+        </div>
       </div>
 
       <div className="row">
-        <button className="secondary" type="button" onClick={goBackToQuestionnaire}>
+        <button
+          className="secondary"
+          type="button"
+          onClick={goBackToQuestionnaire}
+        >
           Back to Questionnaire
         </button>
       </div>
