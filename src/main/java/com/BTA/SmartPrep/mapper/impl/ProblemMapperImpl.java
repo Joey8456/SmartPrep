@@ -2,7 +2,9 @@ package com.BTA.SmartPrep.mapper.impl;
 import com.BTA.SmartPrep.domain.dto.ProblemDto;
 import com.BTA.SmartPrep.domain.entity.Problem;
 import com.BTA.SmartPrep.mapper.ProblemMapper;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ProblemMapperImpl implements ProblemMapper {
     @Override
     public ProblemDto toDto(Problem problem) {

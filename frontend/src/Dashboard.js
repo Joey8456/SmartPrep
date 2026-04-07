@@ -4,14 +4,6 @@ export default function Dashboard({ intake, goBackToQuestionnaire, goToProblemPa
   const topics = intake?.responses?.topics || {};
   const entries = Object.entries(topics);
 
-  // Find weakest topic (lowest rating)
-  let weakest = null;
-  for (const [k, v] of entries) {
-    if (weakest === null || v < weakest.value) {
-      weakest = { key: k, value: v };
-    }
-  }
-
   const niceName = (key) => {
     const map = {
       arrays_strings: "Arrays & Strings",
@@ -47,11 +39,6 @@ export default function Dashboard({ intake, goBackToQuestionnaire, goToProblemPa
             ))}
           </ul>
         )}
-
-        <p>
-          <strong>Recommended next topic:</strong>{" "}
-          {weakest ? `${niceName(weakest.key)} (${weakest.value}/5)` : "—"}
-        </p>
 
         {/* ✅ NEW BUTTON */}
         <div style={{ marginTop: "20px" }}>

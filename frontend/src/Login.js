@@ -28,29 +28,30 @@ export default function Login({ goToQuestionnaire }) {
     }
 
     try {
-      const res = await fetch(
-        isLogin
-          ? "http://localhost:8080/api/v1/users/login"
-          : "http://localhost:8080/api/v1/users",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(
-            isLogin
-              ? {
-                  email: email,
-                  passhash: password,
-                }
-              : {
-                  username: username,
-                  email: email,
-                  passhash: password,
-                }
-          ),
-        }
-      );
+   const url = isLogin
+     ? "http://localhost:8080/api/v1/users/login"
+     : "http://localhost:8080/api/v1/users";
+
+   console.log("Submitting to:", url);
+
+   const res = await fetch(url, {
+     method: "POST",
+     headers: {
+       "Content-Type": "application/json",
+     },
+     body: JSON.stringify(
+       isLogin
+         ? {
+             email: email,
+             passhash: password,
+           }
+         : {
+             username: username,
+             email: email,
+             passhash: password,
+           }
+     ),
+   });
 
       if (!res.ok) {
         throw new Error("Failed to create user");
@@ -187,71 +188,6 @@ export default function Login({ goToQuestionnaire }) {
           </button>
         </div>
       </div>
-      </header>
-
-      <form className="form" onSubmit={handleSubmit}>
-        {!isLogin && (
-          <>
-            <label htmlFor="username">Username</label>
-            <input
-              id="username"
-              type="text"
-              placeholder="your username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-          </>
-        )}
-
-        <label htmlFor="email">Email</label>
-        <input
-          id="email"
-          type="email"
-          placeholder="you@example.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-
-        <label htmlFor="password">Password</label>
-        <input
-          id="password"
-          type="password"
-          placeholder="••••••••"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        {!isLogin && (
-          <>
-            <label htmlFor="confirmPassword">Confirm Password</label>
-            <input
-              id="confirmPassword"
-              type="password"
-              placeholder="••••••••"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-          </>
-        )}
-
-        <button className="primary" type="submit">
-          {isLogin ? "Sign In" : "Sign Up"}
-        </button>
-        <p className="error">{error}</p>
-      </form>
-      <p style={{ marginTop: "1rem", textAlign: "center" }}>
-        {isLogin ? "Don't have an account?" : "Already have an account?"}
-        <button
-          type="button"
-          className="secondary"
-          onClick={() => {
-            setIsLogin(!isLogin);
-            setError("");
-          }}
-          style={{ marginLeft: "8px" }}
-        >
-          {isLogin ? "Sign Up" : "Sign In"}
-        </button>
-      </p>
     </main>
   );
 }
