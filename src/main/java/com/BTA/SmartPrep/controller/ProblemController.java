@@ -17,10 +17,11 @@ public class ProblemController {
         this.problemService = problemService;
     }
 
-    @GetMapping("/{categoryId}/random")
+    @GetMapping("/{userId}/{categoryId}/random")
     public ResponseEntity<ProblemDto> getRandomProblemByCategory(
-            @PathVariable int categoryId
+            @PathVariable int categoryId,
+            @PathVariable String userId
     ) {
-        return ResponseEntity.ok(problemService.getRandomProblemByCategory(categoryId));
+        return ResponseEntity.ok(problemService.getRandomProblemByCategory(categoryId,userId));
     }
 }

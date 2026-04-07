@@ -14,9 +14,9 @@ public interface ProblemRepository extends JpaRepository<Problem, Long> {
     @Query(value = """
         SELECT *
         FROM Problems
-        WHERE category_id = :categoryId
+        WHERE category_id = :categoryId AND difficulty = :difficulty
         ORDER BY RAND()
         LIMIT 1
         """, nativeQuery = true)
-    Optional<Problem> findRandomByCategoryId(@Param("categoryId") int categoryId);
+    Optional<Problem> findRandomByCategoryId(@Param("categoryId") int categoryId, @Param("difficulty") String difficulty);
 }

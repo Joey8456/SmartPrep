@@ -11,7 +11,7 @@ public class Problem {
     public Problem() {
     }
 
-    public Problem(String problemId, String title, String prompt, String examples, ProblemDifficulty problemDifficulty, Category category) {
+    public Problem(String problemId, String title, String prompt, String examples, ProblemDifficulty problemDifficulty, int category) {
         this.problemId = problemId;
         this.title = title;
         this.prompt = prompt;
@@ -38,9 +38,8 @@ public class Problem {
     @Column(name = "difficulty", nullable = false)
     private ProblemDifficulty problemDifficulty;
 
-    @ManyToOne
-    @JoinColumn(name = "category_ID")
-    private Category category;
+    @Column(name = "category_ID")
+    private int category;
 
     public String getProblemId() {
         return problemId;
@@ -82,11 +81,11 @@ public class Problem {
         this.problemDifficulty = problemDifficulty;
     }
 
-    public Category getCategory() {
+    public int getCategory() {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(int category) {
         this.category = category;
     }
 
