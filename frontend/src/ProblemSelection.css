@@ -1,0 +1,123 @@
+.selection-shell {
+  min-height: 100vh;
+  padding: 24px;
+}
+
+.selection-card {
+  max-width: 1050px;
+  margin: 0 auto;
+  padding: 22px;
+  border-radius: 20px;
+  background: rgba(18, 26, 51, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.45);
+}
+
+.selection-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 22px;
+}
+
+.selection-topbar h1 {
+  margin: 0;
+  font-size: 32px;
+}
+
+.selection-user {
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(10, 14, 28, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #dbe5ff;
+  font-weight: 600;
+}
+
+.selection-layout {
+  display: grid;
+  grid-template-columns: 1.3fr 0.9fr;
+  gap: 18px;
+}
+
+.selection-left,
+.selection-right {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.topic-card {
+  width: 100%;
+  text-align: left;
+  padding: 18px;
+  border-radius: 16px;
+  background: rgba(10, 14, 28, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #eaf0ff;
+  transition: transform 0.15s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.topic-card:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+
+}
+
+.topic-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+.topic-progress-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.topic-progress-label {
+  min-width: 38px;
+  font-size: 14px;
+  color: #c8d4f4;
+}
+
+.topic-progress-track {
+  flex: 1;
+  height: 12px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.topic-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #7c5cff, #5a8bff);
+}
+
+.side-action-btn {
+  min-height: 96px;
+  border-radius: 18px;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.primary-side-btn {
+  color: white;
+  background: linear-gradient(135deg, #7c5cff, #5a8bff);
+}
+
+.secondary-side-btn {
+  color: #eaf0ff;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 900px) {
+  .selection-layout {
+    grid-template-columns: 1fr;
+  }
+}
