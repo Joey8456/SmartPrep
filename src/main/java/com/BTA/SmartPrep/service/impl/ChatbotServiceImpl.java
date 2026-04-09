@@ -27,7 +27,7 @@ public class ChatbotServiceImpl implements ChatbotService {
     private String geminiApiKey;
 
     private static final String GEMINI_URL =
-            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=";
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=";
 
     private final ProficiencyRepository proficiencyRepository;
     private final UserRepository userRepository;
@@ -45,11 +45,20 @@ public class ChatbotServiceImpl implements ChatbotService {
 
     @Override
     public ChatbotEvaluateResponseDto evaluate(ChatbotEvaluateRequestDto request) {
-
-        // 1. Build prompt and call Gemini
         String prompt = buildPrompt(request.question(), request.difficulty(), request.answer());
-        String rawText = callGemini(prompt);
 
+        String rawText;
+        try {
+            rawText = callGemini(prompt);
+        } catch (RuntimeException e) {
+            if ("RATE_LIMITED".equals(e.getMessage())) {
+                return new ChatbotEvaluateResponseDto(0, "ERROR",
+                        "Rate limit reached. Please wait a few seconds and try again.");
+            }
+            throw e;
+        }
+
+        // ... rest of the method stays exactly the same
         // 2. Parse the 4 criteria scores from Gemini's JSON response
         int relevance = 0, correctness = 0, completeness = 0, clarity = 0;
         String feedback = "No feedback available.";
@@ -126,34 +135,40 @@ public class ChatbotServiceImpl implements ChatbotService {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         String requestBody = String.format("""
+            {
+              "contents": [
                 {
-                  "contents": [
-                    {
-                      "parts": [
-                        { "text": %s }
-                      ]
-                    }
+                  "parts": [
+                    { "text": %s }
                   ]
                 }
-                """, objectMapper.valueToTree(prompt).toString());
+              ]
+            }
+            """, objectMapper.valueToTree(prompt).toString());
 
         HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
 
-        ResponseEntity<String> response = restTemplate.postForEntity(
-                GEMINI_URL + geminiApiKey,
-                entity,
-                String.class
-        );
-
         try {
+            ResponseEntity<String> response = restTemplate.postForEntity(
+                    GEMINI_URL + geminiApiKey,
+                    entity,
+                    String.class
+            );
+
             JsonNode root = objectMapper.readTree(response.getBody());
             return root
                     .path("candidates").get(0)
                     .path("content")
                     .path("parts").get(0)
                     .path("text").asText();
+
+        } catch (org.springframework.web.client.HttpClientErrorException e) {
+            if (e.getStatusCode().value() == 429) {
+                throw new RuntimeException("RATE_LIMITED");
+            }
+            throw new RuntimeException("Gemini API error: " + e.getStatusCode(), e);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to extract text from Gemini response", e);
+            throw new RuntimeException("Failed to reach Gemini API", e);
         }
     }
 
