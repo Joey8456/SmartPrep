@@ -4,6 +4,7 @@ import com.BTA.SmartPrep.domain.CreateProfficiencyRequest;
 import com.BTA.SmartPrep.domain.CreateUserRequest;
 import com.BTA.SmartPrep.domain.UpdateUserRequest;
 import com.BTA.SmartPrep.domain.dto.CreateUserRequestDto;
+import com.BTA.SmartPrep.domain.dto.ProblemDto;
 import com.BTA.SmartPrep.domain.dto.UpdateUserRequestDto;
 import com.BTA.SmartPrep.domain.dto.UserDto;
 import com.BTA.SmartPrep.domain.entity.Proficiency;
@@ -17,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -45,11 +47,12 @@ public class UserController {
         return new ResponseEntity<>(createdUserDto, HttpStatus.CREATED);
     }
 
-    @GetMapping
-    public ResponseEntity<List<UserDto>> listUsers(){
-        List<User> users = userService.listUsers();
-        List<UserDto> userDtos = users.stream().map(userMapper::toDto).toList();
-        return ResponseEntity.ok(userDtos);
+    @GetMapping("/{userId}")
+    public ResponseEntity<Optional<UserDto>> getRandomProblemByCategory(
+            @PathVariable UUID userId
+    ) {
+
+        return ResponseEntity.ok(userService.getUser(userId));
     }
 
     //TODO implement this

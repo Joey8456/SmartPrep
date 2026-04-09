@@ -13,6 +13,7 @@ function App() {
   const [screen, setScreen] = useState("login");
   const [intake, setIntake] = useState(null);
   const [selectedTopic, setSelectedTopic] = useState("");
+  const [selectedProblem, setSelectedProblem] = useState(null);
 
   return (
     <UserProvider>
@@ -46,16 +47,9 @@ function App() {
       {screen === "problemSelection" && (
         <ProblemSelection
           goBack={() => setScreen("dashboard")}
-          goToProblemPage={(topic) => {
-            if (topic === "Random Problem") {
-              const topics = ["Arrays & Strings", "Two Pointers", "Hash Maps"];
-              const randomTopic =
-                topics[Math.floor(Math.random() * topics.length)];
-              setSelectedTopic(randomTopic);
-            } else {
-              setSelectedTopic(topic);
-            }
-
+          goToProblemPage={(problemDto, topic) => {
+            setSelectedProblem(problemDto);
+            setSelectedTopic(topic || "");
             setScreen("ProblemPage");
           }}
         />
@@ -64,6 +58,7 @@ function App() {
       {screen === "ProblemPage" && (
         <ProblemPage
           topic={selectedTopic}
+          problem={selectedProblem}
           goBack={() => setScreen("problemSelection")}
         />
       )}

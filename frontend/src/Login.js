@@ -64,7 +64,8 @@ export default function Login({ goToQuestionnaire }) {
       setUser(createdUser);
       goToQuestionnaire();
       return;
-    } catch (err) {
+    }
+    catch (err) {
       console.error(err);
       setError(err.message || "Failed to connect to server");
     }

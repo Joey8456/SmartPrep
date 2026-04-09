@@ -3,7 +3,7 @@ import "./App.css";
 import "./ProblemPage.css";
 import Editor from "@monaco-editor/react";
 
-export default function ProblemPage({ topic, goBack }) {
+export default function ProblemPage({ topic, problem, goBack }) {
   const problemData = {
     "Arrays & Strings": {
       title: "Two Sum",
@@ -66,8 +66,23 @@ export default function ProblemPage({ topic, goBack }) {
     }
   };
 
-  const currentProblem =
+  const fallbackProblem =
     problemData[topic] || problemData["Arrays & Strings"];
+
+  const currentProblem = problem
+    ? {
+        title: problem.title || "Problem Title",
+        topicLabel: topic || `Category ${problem.category || ""}`,
+        difficulty: problem.problemDifficulty || "UNKNOWN",
+        explanation: problem.prompt || "Problem prompt unavailable.",
+        exampleInput: problem.examples || "No examples available.",
+        exampleOutput: "",
+        testCases: problem.examples ? [problem.examples] : ["No test cases available."],
+        starterCode: `class Solution {
+
+}`
+      }
+    : fallbackProblem;
 
   const [code, setCode] = useState(currentProblem.starterCode);
   const [output, setOutput] = useState("Output will appear here when submitted.");
@@ -77,7 +92,7 @@ export default function ProblemPage({ topic, goBack }) {
     setCode(currentProblem.starterCode);
     setOutput("Output will appear here when submitted.");
     setResultStatus(null);
-  }, [topic, currentProblem.starterCode]);
+  }, [topic, problem, currentProblem.starterCode]);
 
   function handleSubmit() {
     const trimmedCode = code.trim();
@@ -134,7 +149,7 @@ export default function ProblemPage({ topic, goBack }) {
                 <div className="topic-pill">{currentProblem.topicLabel}</div>
               </div>
 
-              <span className="difficulty-badge easy">
+              <span className={`difficulty-badge ${String(currentProblem.difficulty || "").toLowerCase()}`}>
                 {currentProblem.difficulty}
               </span>
             </div>
@@ -147,11 +162,13 @@ export default function ProblemPage({ topic, goBack }) {
             <div className="workspace-section">
               <h3>Example</h3>
               <p>
-                <strong>Input:</strong> {currentProblem.exampleInput}
+                <strong>Example:</strong> {currentProblem.exampleInput}
               </p>
-              <p>
-                <strong>Output:</strong> {currentProblem.exampleOutput}
-              </p>
+              {currentProblem.exampleOutput ? (
+                <p>
+                  <strong>Output:</strong> {currentProblem.exampleOutput}
+                </p>
+              ) : null}
             </div>
 
             <div className="workspace-section">
