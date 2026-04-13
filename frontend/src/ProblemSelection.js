@@ -3,7 +3,7 @@ import "./ProblemSelection.css";
 import { useEffect, useState } from "react";
 import { useUser } from "./UserContext";
 
-export default function ProblemSelection({ goToProblemPage, goBack }) {
+export default function ProblemSelection({ goToProblemPage, goBack, goToChatbot }) {
   const { user } = useUser();
   const [isLoadingProblem, setIsLoadingProblem] = useState(false);
   const [problemError, setProblemError] = useState("");
@@ -86,35 +86,58 @@ export default function ProblemSelection({ goToProblemPage, goBack }) {
   }
 
   return (
-    <main className="selection-shell">
-      <div className="selection-card">
-        <div className="selection-topbar">
-          <h1>SmartPrep</h1>
-          <div className="selection-user">
-            @{user?.username || "username"}
+      <main className="selection-shell">
+        <div className="selection-card">
+          <div className="selection-topbar">
+            <h1>SmartPrep</h1>
+            <div className="selection-user">
+              @{user?.username || "username"}
+            </div>
           </div>
-        </div>
 
-        <div className="selection-layout">
-          <section className="selection-left">
-            {topics.map((topic) => (
+          <div className="selection-layout">
+            <section className="selection-left">
+              {topics.map((topic) => (
+                  <button
+                      key={topic.key}
+                      type="button"
+                      className="topic-card"
+                      onClick={() => goToProblemPage(topic.label)}
+                  >
+                    <div className="topic-title">{topic.label}</div>
+
+                    <div className="topic-progress-row">
+                      <span className="topic-progress-label">{topic.progress}%</span>
+                      <div className="topic-progress-track">
+                        <div
+                            className="topic-progress-fill"
+                            style={{ width: `${topic.progress}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                  </button>
+              ))}
+            </section>
+
+            <section className="selection-right">
               <button
+                  type="button"
+                  className="side-action-btn primary-side-btn"
+                  onClick={() => goToProblemPage("Random Problem")}
                 key={topic.key}
                 type="button"
                 className="topic-card"
                 onClick={() => handleTopicSelect(topic)}
               >
-                <div className="topic-title">{topic.label}</div>
+                Random Problem
+              </button>
 
-                <div className="topic-progress-row">
-                  <span className="topic-progress-label">{topic.progress}%</span>
-                  <div className="topic-progress-track">
-                    <div
-                      className="topic-progress-fill"
-                      style={{ width: `${topic.progress}%` }}
-                    ></div>
-                  </div>
-                </div>
+              <button
+                  type="button"
+                  className="side-action-btn secondary-side-btn"
+                  onClick={goToChatbot}
+              >
+                AI Chatbot
               </button>
             ))}
           </section>
@@ -146,16 +169,16 @@ export default function ProblemSelection({ goToProblemPage, goBack }) {
               AI Chatbot
             </button>
 
-            <button
-              type="button"
-              className="side-action-btn secondary-side-btn"
-              onClick={goBack}
-            >
-              Back
-            </button>
-          </section>
+              <button
+                  type="button"
+                  className="side-action-btn secondary-side-btn"
+                  onClick={goBack}
+              >
+                Back
+              </button>
+            </section>
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
   );
 }

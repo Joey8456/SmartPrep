@@ -1,0 +1,274 @@
+/* ChatbotPage.css — matches the SmartPrep dark card aesthetic */
+
+.chatbot-shell {
+    min-height: 100vh;
+    padding: 24px;
+}
+
+.chatbot-card {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 28px;
+    border-radius: 20px;
+    background: rgba(18, 26, 51, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.45);
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+/* ── Top bar ───────────────────────────────────────────── */
+.chatbot-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chatbot-topbar h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+.chatbot-badge {
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #7c5cff, #5a8bff);
+    font-size: 13px;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 0.5px;
+}
+
+/* ── Selectors ─────────────────────────────────────────── */
+.chatbot-selectors {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.selector-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #8899cc;
+    margin-bottom: 8px;
+}
+
+.selector-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.pill {
+    padding: 7px 16px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #c8d4f4;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.pill:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.pill-active {
+    background: linear-gradient(135deg, #7c5cff, #5a8bff) !important;
+    border-color: transparent !important;
+    color: white !important;
+}
+
+.pill-diff-easy   { color: #6ee7b7; border-color: rgba(110,231,183,0.25); }
+.pill-diff-medium { color: #fbbf24; border-color: rgba(251,191,36,0.25); }
+.pill-diff-hard   { color: #f87171; border-color: rgba(248,113,113,0.25); }
+
+/* ── Question box ──────────────────────────────────────── */
+.chatbot-question {
+    padding: 18px;
+    border-radius: 14px;
+    background: rgba(10, 14, 28, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.question-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #7c5cff;
+    margin-bottom: 8px;
+}
+
+.chatbot-question p {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.6;
+    color: #eaf0ff;
+}
+
+/* ── Textarea ──────────────────────────────────────────── */
+.chatbot-textarea {
+    width: 100%;
+    padding: 16px;
+    border-radius: 14px;
+    background: rgba(10, 14, 28, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #eaf0ff;
+    font-size: 15px;
+    line-height: 1.6;
+    resize: vertical;
+    box-sizing: border-box;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+.chatbot-textarea:focus {
+    outline: none;
+    border-color: #7c5cff;
+}
+
+.chatbot-textarea::placeholder {
+    color: #4a5578;
+}
+
+/* ── Buttons ───────────────────────────────────────────── */
+.chatbot-submit-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #7c5cff, #5a8bff);
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.chatbot-submit-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.chatbot-submit-btn:hover:not(:disabled) {
+    opacity: 0.88;
+}
+
+.chatbot-back-btn {
+    width: 100%;
+    padding: 12px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #c8d4f4;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.chatbot-back-btn:hover {
+    background: rgba(255, 255, 255, 0.11);
+}
+
+/* ── Error ─────────────────────────────────────────────── */
+.chatbot-error {
+    padding: 14px 18px;
+    border-radius: 12px;
+    background: rgba(248, 113, 113, 0.12);
+    border: 1px solid rgba(248, 113, 113, 0.3);
+    color: #fca5a5;
+    font-size: 14px;
+    margin: 0;
+}
+
+/* ── Result card ───────────────────────────────────────── */
+.result-card {
+    padding: 24px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(10, 14, 28, 0.55);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.result-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.result-score {
+    font-size: 52px;
+    font-weight: 800;
+    color: #eaf0ff;
+    line-height: 1;
+}
+
+.result-score span {
+    font-size: 22px;
+    color: #6677aa;
+    font-weight: 500;
+}
+
+.result-rating-badge {
+    padding: 8px 20px;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* Color themes */
+.rating-green .result-rating-badge,
+.result-card.rating-green { border-color: rgba(110,231,183,0.35); }
+.result-card.rating-green .result-rating-badge {
+    background: rgba(110,231,183,0.15);
+    color: #6ee7b7;
+}
+
+.result-card.rating-yellow { border-color: rgba(251,191,36,0.35); }
+.result-card.rating-yellow .result-rating-badge {
+    background: rgba(251,191,36,0.15);
+    color: #fbbf24;
+}
+
+.result-card.rating-red { border-color: rgba(248,113,113,0.35); }
+.result-card.rating-red .result-rating-badge {
+    background: rgba(248,113,113,0.15);
+    color: #f87171;
+}
+
+.result-feedback {
+    margin: 0;
+    font-size: 15px;
+    color: #c8d4f4;
+    line-height: 1.6;
+    padding: 14px 16px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.result-hint {
+    font-size: 13px;
+    color: #7788bb;
+    text-align: center;
+    font-style: italic;
+}
+
+.result-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
