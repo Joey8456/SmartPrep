@@ -67,19 +67,20 @@ export default function ProblemPage({ topic, problem, goBack }) {
   };
 
   const fallbackProblem =
-    problemData[topic] || problemData["Arrays & Strings"];
+    problemData[topic || "Arrays & Strings"] || problemData["Arrays & Strings"];
 
   const currentProblem = problem
     ? {
         title: problem.title || "Problem Title",
-        topicLabel: topic || `Category ${problem.category || ""}`,
+        topicLabel: topic ?? `Category ${problem.category || ""}`,
         difficulty: problem.problemDifficulty || "UNKNOWN",
         explanation: problem.prompt || "Problem prompt unavailable.",
         exampleInput: problem.examples || "No examples available.",
         exampleOutput: "",
         testCases: problem.examples ? [problem.examples] : ["No test cases available."],
         starterCode: problem.starterCode || `class Solution {
-        }`
+
+}`
       }
     : fallbackProblem;
 
@@ -137,6 +138,24 @@ export default function ProblemPage({ topic, problem, goBack }) {
     }
   }
 
+  if (!currentProblem || !currentProblem.testCases) {
+    return (
+      <main className="workspace-shell">
+        <div className="workspace-layout">
+          <section className="workspace-left">
+            <div className="workspace-card">
+              <h2>No problem loaded</h2>
+              <p>Please go back and select a problem.</p>
+              <button className="secondary" type="button" onClick={goBack}>
+                Back
+              </button>
+            </div>
+          </section>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="workspace-shell">
       <div className="workspace-layout">
@@ -173,7 +192,7 @@ export default function ProblemPage({ topic, problem, goBack }) {
             <div className="workspace-section">
               <h3>Test Cases</h3>
               <ul className="test-case-list">
-                {currentProblem.testCases.map((testCase, index) => (
+                {(currentProblem.testCases || []).map((testCase, index) => (
                   <li key={index}>{testCase}</li>
                 ))}
               </ul>

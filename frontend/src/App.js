@@ -45,53 +45,30 @@ function App() {
         )}
 
         {screen === "problemSelection" && (
-            <ProblemSelection
-                goBack={() => setScreen("dashboard")}
-                goToChatbot={() => setScreen("chatbot")}
-                goToProblemPage={(topic) => {
-                  if (topic === "Random Problem") {
-                    const topics = ["Arrays & Strings", "Two Pointers", "Hash Maps"];
-                    const randomTopic =
-                        topics[Math.floor(Math.random() * topics.length)];
-                    setSelectedTopic(randomTopic);
-                  } else {
-                    setSelectedTopic(topic);
-                  }
-                  setScreen("ProblemPage");
-                }}
-            />
-        )}
+                <ProblemSelection
+                  goBack={() => setScreen("dashboard")}
+                  goToProblemPage={(problemDto, topic) => {
+                    setSelectedProblem(problemDto);
+                    setSelectedTopic(topic || "");
+                    setScreen("ProblemPage");
+                  }}
+                  goToChatbot={() => setScreen("chatbot")}
+                />
+              )}
 
-        {screen === "ProblemPage" && (
-            <ProblemPage
-                topic={selectedTopic}
-                goBack={() => setScreen("problemSelection")}
-            />
-        )}
+       {screen === "ProblemPage" && (
+               <ProblemPage
+                 topic={selectedTopic}
+                 problem={selectedProblem}
+                 goBack={() => setScreen("problemSelection")}
+               />
+             )}
 
         {screen === "chatbot" && (
             <ChatbotPage goBack={() => setScreen("problemSelection")} />
         )}
-      </UserProvider>
-      {screen === "problemSelection" && (
-        <ProblemSelection
-          goBack={() => setScreen("dashboard")}
-          goToProblemPage={(problemDto, topic) => {
-            setSelectedProblem(problemDto);
-            setSelectedTopic(topic || "");
-            setScreen("ProblemPage");
-          }}
-        />
-      )}
 
-      {screen === "ProblemPage" && (
-        <ProblemPage
-          topic={selectedTopic}
-          problem={selectedProblem}
-          goBack={() => setScreen("problemSelection")}
-        />
-      )}
-    </UserProvider>
+      </UserProvider>
   );
 }
 

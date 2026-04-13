@@ -48,7 +48,7 @@ export default function ProblemSelection({ goToProblemPage, goBack, goToChatbot 
   const topics = [
     { key: "arrays", label: "Arrays & Strings", progress: proficiencies[1] ?? 0, categoryId: 1 },
     { key: "twoPointers", label: "Two Pointers", progress: proficiencies[2] ?? 0, categoryId: 2 },
-    { key: "hashMaps", label: "Hash Maps", progress: proficiencies[3] ?? 0, categoryId: 3 }
+    { key: "hashMaps", label: "Hash Maps", progress: proficiencies[3] ?? 0, categoryId: 3 },
   ];
 
   async function handleTopicSelect(topic) {
@@ -86,58 +86,33 @@ export default function ProblemSelection({ goToProblemPage, goBack, goToChatbot 
   }
 
   return (
-      <main className="selection-shell">
-        <div className="selection-card">
-          <div className="selection-topbar">
-            <h1>SmartPrep</h1>
-            <div className="selection-user">
-              @{user?.username || "username"}
-            </div>
-          </div>
+    <main className="selection-shell">
+      <div className="selection-card">
+        <div className="selection-topbar">
+          <h1>SmartPrep</h1>
+          <div className="selection-user">@{user?.username || "username"}</div>
+        </div>
 
-          <div className="selection-layout">
-            <section className="selection-left">
-              {topics.map((topic) => (
-                  <button
-                      key={topic.key}
-                      type="button"
-                      className="topic-card"
-                      onClick={() => goToProblemPage(topic.label)}
-                  >
-                    <div className="topic-title">{topic.label}</div>
-
-                    <div className="topic-progress-row">
-                      <span className="topic-progress-label">{topic.progress}%</span>
-                      <div className="topic-progress-track">
-                        <div
-                            className="topic-progress-fill"
-                            style={{ width: `${topic.progress}%` }}
-                        ></div>
-                      </div>
-                    </div>
-                  </button>
-              ))}
-            </section>
-
-            <section className="selection-right">
+        <div className="selection-layout">
+          <section className="selection-left">
+            {topics.map((topic) => (
               <button
-                  type="button"
-                  className="side-action-btn primary-side-btn"
-                  onClick={() => goToProblemPage("Random Problem")}
                 key={topic.key}
                 type="button"
                 className="topic-card"
                 onClick={() => handleTopicSelect(topic)}
               >
-                Random Problem
-              </button>
+                <div className="topic-title">{topic.label}</div>
 
-              <button
-                  type="button"
-                  className="side-action-btn secondary-side-btn"
-                  onClick={goToChatbot}
-              >
-                AI Chatbot
+                <div className="topic-progress-row">
+                  <span className="topic-progress-label">{topic.progress}%</span>
+                  <div className="topic-progress-track">
+                    <div
+                      className="topic-progress-fill"
+                      style={{ width: `${topic.progress}%` }}
+                    ></div>
+                  </div>
+                </div>
               </button>
             ))}
           </section>
@@ -165,20 +140,21 @@ export default function ProblemSelection({ goToProblemPage, goBack, goToChatbot 
             <button
               type="button"
               className="side-action-btn secondary-side-btn"
+              onClick={goToChatbot}
             >
               AI Chatbot
             </button>
 
-              <button
-                  type="button"
-                  className="side-action-btn secondary-side-btn"
-                  onClick={goBack}
-              >
-                Back
-              </button>
-            </section>
-          </div>
+            <button
+              type="button"
+              className="side-action-btn secondary-side-btn"
+              onClick={goBack}
+            >
+              Back
+            </button>
+          </section>
         </div>
-      </main>
+      </div>
+    </main>
   );
 }
