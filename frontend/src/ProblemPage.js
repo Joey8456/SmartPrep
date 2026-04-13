@@ -78,9 +78,8 @@ export default function ProblemPage({ topic, problem, goBack }) {
         exampleInput: problem.examples || "No examples available.",
         exampleOutput: "",
         testCases: problem.examples ? [problem.examples] : ["No test cases available."],
-        starterCode: `class Solution {
-
-}`
+        starterCode: problem.starterCode || `class Solution {
+        }`
       }
     : fallbackProblem;
 

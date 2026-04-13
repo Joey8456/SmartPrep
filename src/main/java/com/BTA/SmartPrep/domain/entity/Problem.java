@@ -11,13 +11,14 @@ public class Problem {
     public Problem() {
     }
 
-    public Problem(String problemId, String title, String prompt, String examples, ProblemDifficulty problemDifficulty, int category) {
+    public Problem(String problemId, String title, String prompt, String examples, ProblemDifficulty problemDifficulty, int category, String starterCode) {
         this.problemId = problemId;
         this.title = title;
         this.prompt = prompt;
         this.examples = examples;
         this.problemDifficulty = problemDifficulty;
         this.category = category;
+        this.starterCode = starterCode;
     }
 
     @Id //This Annotation Says this is an ID
@@ -40,6 +41,9 @@ public class Problem {
 
     @Column(name = "category_ID")
     private int category;
+
+    @Column(name = "starterCode")
+    private String starterCode;
 
     public String getProblemId() {
         return problemId;
@@ -87,6 +91,14 @@ public class Problem {
 
     public void setCategory(int category) {
         this.category = category;
+    }
+
+    public String getStarterCode() {
+        return starterCode;
+    }
+
+    public void setStarterCode(String starterCode) {
+        this.starterCode = starterCode;
     }
 
     @Override

@@ -8,6 +8,7 @@ public record ProblemDto (
         String prompt,
         String examples,
         ProblemDifficulty problemDifficulty,
-        int category
+        int category,
+        String starterCode
 ) {
 }
