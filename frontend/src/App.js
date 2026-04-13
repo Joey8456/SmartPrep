@@ -13,6 +13,7 @@ function App() {
   const [screen, setScreen] = useState("login");
   const [intake, setIntake] = useState(null);
   const [selectedTopic, setSelectedTopic] = useState("");
+  const [selectedProblem, setSelectedProblem] = useState(null);
 
   return (
       <UserProvider>
@@ -72,6 +73,25 @@ function App() {
             <ChatbotPage goBack={() => setScreen("problemSelection")} />
         )}
       </UserProvider>
+      {screen === "problemSelection" && (
+        <ProblemSelection
+          goBack={() => setScreen("dashboard")}
+          goToProblemPage={(problemDto, topic) => {
+            setSelectedProblem(problemDto);
+            setSelectedTopic(topic || "");
+            setScreen("ProblemPage");
+          }}
+        />
+      )}
+
+      {screen === "ProblemPage" && (
+        <ProblemPage
+          topic={selectedTopic}
+          problem={selectedProblem}
+          goBack={() => setScreen("problemSelection")}
+        />
+      )}
+    </UserProvider>
   );
 }
 

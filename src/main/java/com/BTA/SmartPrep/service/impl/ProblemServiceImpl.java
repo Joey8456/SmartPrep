@@ -32,11 +32,11 @@ import java.util.Optional;
             if (optionalProficiency.isPresent()) {
                 Proficiency proficiency = optionalProficiency.get();
                 if (proficiency.getProficiency() >= 1 && proficiency.getProficiency() <= 33) {
-                    difficulty = "Easy";
+                    difficulty = "EASY";
                 } else if (proficiency.getProficiency() >= 34 && proficiency.getProficiency() <= 66) {
-                    difficulty = "Medium";
+                    difficulty = "MEDIUM";
                 } else if (proficiency.getProficiency() >= 67 && proficiency.getProficiency() <= 100) {
-                    difficulty = "Hard";
+                    difficulty = "HARD";
                 }
             }
 

@@ -1,15 +1,89 @@
 import "./App.css";
 import "./ProblemSelection.css";
+import { useEffect, useState } from "react";
 import { useUser } from "./UserContext";
 
 export default function ProblemSelection({ goToProblemPage, goBack, goToChatbot }) {
   const { user } = useUser();
+  const [isLoadingProblem, setIsLoadingProblem] = useState(false);
+  const [problemError, setProblemError] = useState("");
+  const [proficiencies, setProficiencies] = useState({});
+
+  useEffect(() => {
+    const userId = user?.userId;
+
+    if (!userId) {
+      return;
+    }
+
+    async function fetchProficiencies() {
+      try {
+        const profMap = {};
+
+        for (const categoryId of [1, 2, 3]) {
+          const res = await fetch(`http://localhost:8080/api/v1/proficiencies/${userId}/${categoryId}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          if (!res.ok) {
+            throw new Error("Failed to fetch proficiencies");
+          }
+
+          const data = await res.json();
+          profMap[categoryId] = data.proficiency ?? data;
+        }
+
+        setProficiencies(profMap);
+      } catch (error) {
+        console.error("Failed to load proficiencies:", error);
+      }
+    }
+
+    fetchProficiencies();
+  }, [user]);
 
   const topics = [
-    { key: "arrays", label: "Arrays & Strings", progress: 25 },
-    { key: "twoPointers", label: "Two Pointers", progress: 40 },
-    { key: "hashMaps", label: "Hash Maps", progress: 15 }
+    { key: "arrays", label: "Arrays & Strings", progress: proficiencies[1] ?? 0, categoryId: 1 },
+    { key: "twoPointers", label: "Two Pointers", progress: proficiencies[2] ?? 0, categoryId: 2 },
+    { key: "hashMaps", label: "Hash Maps", progress: proficiencies[3] ?? 0, categoryId: 3 }
   ];
+
+  async function handleTopicSelect(topic) {
+    const userId = user?.userId;
+
+    if (!userId) {
+      setProblemError("No user is loaded yet.");
+      return;
+    }
+
+    setIsLoadingProblem(true);
+    setProblemError("");
+
+    try {
+      const res = await fetch(`http://localhost:8080/api/v1/problem/${userId}/${topic.categoryId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch problem");
+      }
+
+      const problemDto = await res.json();
+      console.log("Loaded problem:", problemDto);
+      goToProblemPage(problemDto, topic.label);
+    } catch (error) {
+      console.error("Error fetching problem:", error);
+      setProblemError("Could not load a problem for this category.");
+    } finally {
+      setIsLoadingProblem(false);
+    }
+  }
 
   return (
       <main className="selection-shell">
@@ -50,6 +124,10 @@ export default function ProblemSelection({ goToProblemPage, goBack, goToChatbot 
                   type="button"
                   className="side-action-btn primary-side-btn"
                   onClick={() => goToProblemPage("Random Problem")}
+                key={topic.key}
+                type="button"
+                className="topic-card"
+                onClick={() => handleTopicSelect(topic)}
               >
                 Random Problem
               </button>
@@ -61,6 +139,35 @@ export default function ProblemSelection({ goToProblemPage, goBack, goToChatbot 
               >
                 AI Chatbot
               </button>
+            ))}
+          </section>
+
+          <section className="selection-right">
+            <button
+              type="button"
+              className="side-action-btn primary-side-btn"
+              onClick={() => {
+                const randomTopic = topics[Math.floor(Math.random() * topics.length)];
+                handleTopicSelect(randomTopic);
+              }}
+            >
+              Random Problem
+            </button>
+
+            {isLoadingProblem && (
+              <div className="selection-status">Loading problem...</div>
+            )}
+
+            {problemError && (
+              <div className="selection-status error-text">{problemError}</div>
+            )}
+
+            <button
+              type="button"
+              className="side-action-btn secondary-side-btn"
+            >
+              AI Chatbot
+            </button>
 
               <button
                   type="button"

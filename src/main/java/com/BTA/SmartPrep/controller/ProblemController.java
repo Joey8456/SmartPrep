@@ -19,7 +19,7 @@ public class ProblemController {
         this.problemService = problemService;
     }
 
-    @GetMapping("/{userId}/{categoryId}/random")
+    @GetMapping("/{userId}/{categoryId}")
     public ResponseEntity<ProblemDto> getRandomProblemByCategory(
             @PathVariable int categoryId,
             @PathVariable String userId

@@ -2,10 +2,8 @@ package com.BTA.SmartPrep.service.impl;
 
 import com.BTA.SmartPrep.domain.CreateProfficiencyRequest;
 import com.BTA.SmartPrep.domain.CreateUserRequest;
-import com.BTA.SmartPrep.domain.UpdateUserRequest;
-import com.BTA.SmartPrep.domain.entity.Proficiency;
+import com.BTA.SmartPrep.domain.dto.UserDto;
 import com.BTA.SmartPrep.domain.entity.User;
-import com.BTA.SmartPrep.exception.UserNotFoundException;
 import com.BTA.SmartPrep.mapper.ProfficiencyMapper;
 import com.BTA.SmartPrep.repository.ProficiencyRepository;
 import com.BTA.SmartPrep.repository.UserRepository;
@@ -13,7 +11,7 @@ import com.BTA.SmartPrep.service.ProfficiencyService;
 import com.BTA.SmartPrep.service.UserService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service //Marks UserServiceImpl as a bean, and injects any dependencies needed.
@@ -40,8 +38,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> listUsers() {
-        return userRepository.findAll();
+    public Optional<UserDto> getUser(UUID userId) {
+        return userRepository.findById(userId)
+                .map(user -> new UserDto(user.getId(), user.getUserName(), user.getEmail()));
     }
 
 

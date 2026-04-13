@@ -34,8 +34,7 @@ public class UserMapperImpl implements UserMapper {
         return new UserDto(
                 user.getId(),
                 user.getUserName(),
-                user.getEmail(),
-                user.getPass_hash()
+                user.getEmail()
         );
     }
 }
