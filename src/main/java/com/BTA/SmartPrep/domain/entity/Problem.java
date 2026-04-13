@@ -1,7 +1,6 @@
 package com.BTA.SmartPrep.domain.entity;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.ManyToAny;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -12,19 +11,20 @@ public class Problem {
     public Problem() {
     }
 
-    public Problem(UUID problemId, String title, String prompt, String examples, ProblemDifficulty problemDifficulty, Category category) {
+    public Problem(String problemId, String title, String prompt, String examples, ProblemDifficulty problemDifficulty, int category, String starterCode) {
         this.problemId = problemId;
         this.title = title;
         this.prompt = prompt;
         this.examples = examples;
         this.problemDifficulty = problemDifficulty;
         this.category = category;
+        this.starterCode = starterCode;
     }
 
     @Id //This Annotation Says this is an ID
     @GeneratedValue(strategy = GenerationType.UUID) //Creates ID for us, using UUID
     @Column(name = "problem_ID",updatable = false,nullable = false) //col name from DB, not Updatable, cannot be null
-    private UUID problemId;
+    private String problemId;
 
     @Column(name = "pTitle")
     private String title;
@@ -39,15 +39,17 @@ public class Problem {
     @Column(name = "difficulty", nullable = false)
     private ProblemDifficulty problemDifficulty;
 
-    @ManyToOne
-    @JoinColumn(name = "category_ID")
-    private Category category;
+    @Column(name = "category_ID")
+    private int category;
 
-    public UUID getProblemId() {
+    @Column(name = "starterCode")
+    private String starterCode;
+
+    public String getProblemId() {
         return problemId;
     }
 
-    public void setProblemId(UUID problemId) {
+    public void setProblemId(String problemId) {
         this.problemId = problemId;
     }
 
@@ -83,12 +85,20 @@ public class Problem {
         this.problemDifficulty = problemDifficulty;
     }
 
-    public Category getCategory() {
+    public int getCategory() {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(int category) {
         this.category = category;
+    }
+
+    public String getStarterCode() {
+        return starterCode;
+    }
+
+    public void setStarterCode(String starterCode) {
+        this.starterCode = starterCode;
     }
 
     @Override

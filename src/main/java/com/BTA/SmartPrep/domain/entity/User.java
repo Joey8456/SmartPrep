@@ -1,5 +1,6 @@
 package com.BTA.SmartPrep.domain.entity;
 import jakarta.persistence.*;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -11,17 +12,19 @@ public class User {
     public User() {
     }
     //N-Arg
-    public User(UUID id, String userName, String email, String pass_hash) {
+    public User(String id, String userName, String email, String passhash) {
+
         this.userId = id;
         this.userName = userName;
         this.email = email;
-        this.pass_hash = pass_hash;
+        this.passhash = passhash;
     }
 
     @Id //This Annotation Says this is an ID
-    @GeneratedValue(strategy = GenerationType.UUID) //Creates ID for us, using UUID
-    @Column(name = "userID",updatable = false,nullable = false) //col name from DB, not Updatable, cannot be null
-    private UUID userId;
+    @GeneratedValue
+    @UuidGenerator
+    @Column(name = "user_ID",updatable = false,nullable = false) //col name from DB, not Updatable, cannot be null
+    private String userId;
 
     @Column(name = "username",nullable = false)
     private String userName;
@@ -29,13 +32,13 @@ public class User {
     @Column(name = "email",nullable = false)
     private String email;
 
-    @Column(name = "pass_Hash",nullable = false)
-    private String pass_hash;
-    public UUID getId() {
+    @Column(name = "pass_hash",nullable = false)
+    private String passhash;
+    public String getId() {
         return userId;
     }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.userId = id;
     }
 
@@ -56,11 +59,11 @@ public class User {
     }
 
     public String getPass_hash() {
-        return pass_hash;
+        return passhash;
     }
 
-    public void setPass_hash(String pass_hash) {
-        this.pass_hash = pass_hash;
+    public void setPass_hash(String passhash) {
+        this.passhash = passhash;
     }
 
     @Override // Checks ID To make sure Equal
@@ -81,7 +84,7 @@ public class User {
                 "id=" + userId +
                 ", userName='" + userName + '\'' +
                 ", email='" + email + '\'' +
-                ", pass_hash='" + pass_hash + '\'' +
+                ", passhash='" + passhash + '\'' +
                 '}';
     }
 }

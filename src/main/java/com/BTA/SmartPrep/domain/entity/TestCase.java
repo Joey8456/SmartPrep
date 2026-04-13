@@ -11,7 +11,7 @@ public class TestCase {
     public TestCase() {
     }
 
-    public TestCase(UUID testId, String testCase, String expectedOutput, Problem problem) {
+    public TestCase(String testId, String testCase, String expectedOutput, Problem problem) {
         this.testId = testId;
         this.testCase = testCase;
         this.expectedOutput = expectedOutput;
@@ -21,7 +21,7 @@ public class TestCase {
     @Id //This Annotation Says this is an ID
     @GeneratedValue(strategy = GenerationType.UUID) //Creates ID for us, using UUID
     @Column(name = "submission_ID",updatable = false,nullable = false) //col name from DB, not Updatable, cannot be null
-    private UUID testId;
+    private String testId;
 
     @Column(name = "testCase")
     private String testCase;
@@ -33,11 +33,11 @@ public class TestCase {
     @JoinColumn(name = "problem_ID")
     private Problem problem;
 
-    public UUID getTestId() {
+    public String getTestId() {
         return testId;
     }
 
-    public void setTestId(UUID testId) {
+    public void setTestId(String testId) {
         this.testId = testId;
     }
 

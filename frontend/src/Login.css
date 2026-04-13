@@ -1,0 +1,23 @@
+.loginCard {
+  text-align: left;
+}
+
+.loginCard h1,
+.loginCard .subtitle {
+  text-align: center;
+}
+
+.footerText {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: #eaf0ff;
+  text-align: center;
+}
+
+.authSwitch {
+  margin-top: 22px;
+}
+
+.authSwitchBtn {
+  margin-top: 0;
+}
