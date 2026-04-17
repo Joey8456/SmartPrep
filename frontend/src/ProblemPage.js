@@ -96,46 +96,7 @@ export default function ProblemPage({ topic, problem, goBack }) {
 
   function handleSubmit() {
     const trimmedCode = code.trim();
-    const starterTrimmed = currentProblem.starterCode.trim();
-
-    if (!trimmedCode || trimmedCode === starterTrimmed) {
-      setResultStatus("red");
-      setOutput("❌ Submission incomplete. You need to add more code before submitting.");
-      return;
-    }
-
-    const hasReturn = trimmedCode.includes("return");
-    const hasLoop =
-      trimmedCode.includes("for") ||
-      trimmedCode.includes("while");
-    const hasIf = trimmedCode.includes("if");
-    const hasMap =
-      trimmedCode.includes("HashMap") ||
-      trimmedCode.includes("HashSet") ||
-      trimmedCode.includes("Map") ||
-      trimmedCode.includes("Set");
-    const hasTwoPointerHints =
-      trimmedCode.includes("left") ||
-      trimmedCode.includes("right") ||
-      trimmedCode.includes("charAt");
-    const hasLength = trimmedCode.length > starterTrimmed.length + 20;
-
-    const strengthScore = [
-      hasReturn,
-      hasLoop,
-      hasIf,
-      hasMap,
-      hasTwoPointerHints,
-      hasLength
-    ].filter(Boolean).length;
-
-    if (strengthScore >= 3) {
-      setResultStatus("green");
-      setOutput("✅ Demo result: submission looks strong. Most test cases would likely pass.");
-    } else {
-      setResultStatus("yellow");
-      setOutput("⚠️ Demo result: good start, but the solution may still be incomplete.");
-    }
+    console.log(trimmedCode);
   }
 
   if (!currentProblem || !currentProblem.testCases) {

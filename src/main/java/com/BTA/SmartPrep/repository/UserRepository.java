@@ -22,4 +22,5 @@ public interface UserRepository extends JpaRepository <User, UUID> {
             @Param("email") String email,
             @Param("passHash") String passHash
     );
+    User findByEmail(String email);
 }

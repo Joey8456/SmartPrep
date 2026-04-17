@@ -3,7 +3,6 @@ import Login from "./Login";
 import "./App.css";
 import Questionnaire from "./Questionnaire";
 import { INTAKE_QUESTIONS } from "./Questions";
-import Dashboard from "./Dashboard";
 import ProblemPage from "./ProblemPage";
 import ProblemSelection from "./ProblemSelection";
 import ChatbotPage from "./ChatbotPage";
@@ -11,7 +10,6 @@ import { UserProvider } from "./UserContext";
 
 function App() {
   const [screen, setScreen] = useState("login");
-  const [intake, setIntake] = useState(null);
   const [selectedTopic, setSelectedTopic] = useState("");
   const [selectedProblem, setSelectedProblem] = useState(null);
 
@@ -22,6 +20,9 @@ function App() {
                 goToQuestionnaire={() => {
                   setScreen("questionnaire");
                 }}
+                goToProblemSelection={() => {
+               setScreen("problemSelection");
+                }}
             />
         )}
 
@@ -30,23 +31,14 @@ function App() {
                 questions={INTAKE_QUESTIONS}
                 goBack={() => setScreen("login")}
                 onSubmit={(payload) => {
-                  setIntake(payload);
-                  setScreen("dashboard");
+                  setScreen("problemSelection");
                 }}
-            />
-        )}
-
-        {screen === "dashboard" && (
-            <Dashboard
-                intake={intake}
-                goBackToQuestionnaire={() => setScreen("questionnaire")}
-                goToProblemPage={() => setScreen("problemSelection")}
             />
         )}
 
         {screen === "problemSelection" && (
                 <ProblemSelection
-                  goBack={() => setScreen("dashboard")}
+                  goBack={() => setScreen("questionnaire")}
                   goToProblemPage={(problemDto, topic) => {
                     setSelectedProblem(problemDto);
                     setSelectedTopic(topic || "");

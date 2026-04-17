@@ -30,7 +30,7 @@ public class UserController {
     private final UserMapper userMapper;
     private final ProfficiencyService profficiencyService;
 
-    public UserController(UserService userService, UserMapper userMapper, ProfficiencyService profficiencyService){
+    public UserController(UserService userService, UserMapper userMapper, ProfficiencyService profficiencyService) {
         this.userService = userService;
         this.userMapper = userMapper;
         this.profficiencyService = profficiencyService;
@@ -54,7 +54,15 @@ public class UserController {
 
         return ResponseEntity.ok(userService.getUser(userId));
     }
-
+    @GetMapping("/{email}/{passhash}")
+    public ResponseEntity<UserDto> getUser(
+            @PathVariable String email,
+            @PathVariable String passhash
+    ){
+        User user = userService.getUserLogin(email,passhash);
+        UserDto userDto = userMapper.toDto(user);
+        return ResponseEntity.ok(userDto);
+    }
     //TODO implement this
 //    @PutMapping(path = "/{userId}")
 //    public ResponseEntity<UserDto> updateUser(
@@ -66,31 +74,4 @@ public class UserController {
 //        UserDto userDto = userMapper.toDto(user);
 //        return ResponseEntity.ok(userDto);
 //    }
-
-
-    //BELOW ARE ALL TESTS.
-
-
-    @RestController
-    @RequestMapping("/test")
-    public class TestController {
-
-        @GetMapping
-        public String test() {
-            return "Backend is working";
-        }
-    }
-    @Autowired
-    private UserRepository userRepository;
-    @GetMapping("/add")
-    public String addUser() {
-        userRepository.insertUser("test", "test@test.com", "123");
-        return "User saved";
-    }
-
-    @GetMapping("/all")
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-    }
-
+}

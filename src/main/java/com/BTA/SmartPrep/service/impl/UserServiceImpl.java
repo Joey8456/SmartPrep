@@ -25,7 +25,6 @@ public class UserServiceImpl implements UserService {
         this.proficiencyRepository = proficiencyRepository;
         this. profficiencyMapper = profficiencyMapper;
     }
-
     @Override
     public User createUser(CreateUserRequest request) {
         User user = new User(null, request.username(), request.email(), request.passhash() );
@@ -36,18 +35,20 @@ public class UserServiceImpl implements UserService {
 
         return savedUser;
     }
-
     @Override
     public Optional<UserDto> getUser(UUID userId) {
         return userRepository.findById(userId)
                 .map(user -> new UserDto(user.getId(), user.getUserName(), user.getEmail()));
     }
 
-
-
-//    @Override
-//    public User updateUser(String user_Id, UpdateUserRequest request) {
-//
-//    }
-
+    @Override
+    public User getUserLogin(String email, String passhash) {
+        User user = userRepository.findByEmail(email);
+        if (user.getPass_hash().equals(passhash)){
+            return user;
+        }
+        else{
+            throw new RuntimeException("Invalid email or password");
+        }
+    }
 }

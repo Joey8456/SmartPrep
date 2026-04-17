@@ -3,11 +3,13 @@ import "./Login.css";
 import { useState } from "react";
 import { useUser } from "./UserContext";
 
-export default function Login({ goToQuestionnaire }) {
-  const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+export default function Login({ goToQuestionnaire,goToProblemSelection}) {
+  const [form, setForm] = useState({
+    email: "",
+    username: "",
+    password: "",
+    confirmPassword: ""
+  });
   const [error, setError] = useState("");
   const [isLogin, setIsLogin] = useState(false);
   const { setUser } = useUser();
@@ -16,7 +18,8 @@ export default function Login({ goToQuestionnaire }) {
     e.preventDefault();
     setError("");
 
-    // Basic validation
+    const { email, username, password, confirmPassword } = form;
+
     if (!email || !password || (!isLogin && (!username || !confirmPassword))) {
       setError("Please fill in all required fields.");
       return;
@@ -27,10 +30,37 @@ export default function Login({ goToQuestionnaire }) {
       return;
     }
 
+    if (isLogin) {
+      try {
+        const url = `http://localhost:8080/api/v1/users/${encodeURIComponent(form.email)}/${encodeURIComponent(form.password)}`;
+
+        console.log("Logging in to:", url);
+
+        const res = await fetch(url, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!res.ok) {
+          throw new Error("Invalid email or password");
+        }
+
+        const user = await res.json();
+
+        setUser(user);
+        goToProblemSelection();
+        return;
+      } catch (err) {
+        console.error(err);
+        setError(err.message || "Login failed");
+        return;
+      }
+    }
+    else{
     try {
-   const url = isLogin
-     ? "http://localhost:8080/api/v1/users/login"
-     : "http://localhost:8080/api/v1/users";
+   const url = "http://localhost:8080/api/v1/users";
 
    console.log("Submitting to:", url);
 
@@ -39,18 +69,11 @@ export default function Login({ goToQuestionnaire }) {
      headers: {
        "Content-Type": "application/json",
      },
-     body: JSON.stringify(
-       isLogin
-         ? {
-             email: email,
-             passhash: password,
-           }
-         : {
-             username: username,
-             email: email,
-             passhash: password,
-           }
-     ),
+     body: JSON.stringify({
+       username: form.username,
+       email: form.email,
+       passhash: form.password
+     }),
    });
 
       if (!res.ok) {
@@ -68,51 +91,7 @@ export default function Login({ goToQuestionnaire }) {
     catch (err) {
       console.error(err);
       setError(err.message || "Failed to connect to server");
-    }
-
-    if (!isLogin && password !== confirmPassword) {
-      setError("Passwords do not match.");
-      return;
-    }
-
-    try {
-      // Try backend (if it's running)
-      const res = await fetch(
-        isLogin
-          ? "http://localhost:8080/api/v1/users/login"
-          : "http://localhost:8080/api/v1/users",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(
-            isLogin
-              ? { email, passhash: password }
-              : { username, email, passhash: password }
-          )
-        }
-      );
-
-      if (!res.ok) {
-        throw new Error("Backend request failed");
       }
-
-      const createdUser = await res.json();
-      setUser(createdUser);
-      goToQuestionnaire();
-
-    } catch (err) {
-      console.log("Backend not available, using demo mode");
-
-      // ✅ DEMO MODE (this is the important part)
-      const demoUser = {
-        username: username || "Demo User",
-        email
-      };
-
-      setUser(demoUser);
-      goToQuestionnaire();
     }
   }
 
@@ -130,9 +109,11 @@ export default function Login({ goToQuestionnaire }) {
               <label>Username</label>
               <input
                 type="text"
-                placeholder="your username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Enter Username"
+                value={form.username}
+                onChange={(e) =>
+                  setForm({ ...form, username: e.target.value })
+                }
               />
             </>
           )}
@@ -140,17 +121,21 @@ export default function Login({ goToQuestionnaire }) {
           <label>Email</label>
           <input
             type="email"
-            placeholder="you@example.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter Email"
+            value={form.email}
+            onChange={(e) =>
+              setForm({ ...form, email: e.target.value })
+            }
           />
 
           <label>Password</label>
           <input
             type="password"
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter Password"
+            value={form.password}
+            onChange={(e) =>
+              setForm({ ...form, password: e.target.value })
+            }
           />
 
           {!isLogin && (
@@ -158,9 +143,11 @@ export default function Login({ goToQuestionnaire }) {
               <label>Confirm Password</label>
               <input
                 type="password"
-                placeholder="••••••••"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirm Password"
+                value={form.confirmPassword}
+                onChange={(e) =>
+                  setForm({ ...form, confirmPassword: e.target.value })
+                }
               />
             </>
           )}
@@ -183,6 +170,12 @@ export default function Login({ goToQuestionnaire }) {
             onClick={() => {
               setIsLogin(!isLogin);
               setError("");
+              setForm({
+                email: "",
+                username: "",
+                password: "",
+                confirmPassword: ""
+              });
             }}
           >
             {isLogin ? "Sign Up" : "Sign In"}

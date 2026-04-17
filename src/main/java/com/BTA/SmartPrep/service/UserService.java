@@ -13,6 +13,7 @@ public interface UserService {
 
     User createUser(CreateUserRequest request);
     Optional<UserDto> getUser(UUID userId);
+    User getUserLogin(String email, String passhash);
 
     //TODO
 //    User updateUser(String userId, UpdateUserRequest request);
