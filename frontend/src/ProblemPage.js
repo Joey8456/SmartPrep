@@ -3,7 +3,7 @@ import "./App.css";
 import "./ProblemPage.css";
 import Editor from "@monaco-editor/react";
 
-export default function ProblemPage({ topic, problem, goBack }) {
+export default function ProblemPage({ topic, problem, goBack, userId }) {
   const [error, setError] = useState("");
   const problemData = {
     "Arrays & Strings": {
@@ -89,6 +89,9 @@ export default function ProblemPage({ topic, problem, goBack }) {
       ? problem.sampleTestCase
       : "No test cases available.";
 
+  const resolvedUserId = userId;
+  const resolvedCategoryId = problem?.category ?? null;
+
   const [code, setCode] = useState(currentProblem.starterCode);
   const [output, setOutput] = useState("Output will appear here when submitted.");
   const [resultStatus, setResultStatus] = useState(null); // "red" | "yellow" | "green" | null
@@ -104,27 +107,32 @@ export default function ProblemPage({ topic, problem, goBack }) {
     console.log("problem:", problem);
     console.log("problem.problemId:", problem?.problemId);
     try {
-      const res = await fetch("http://localhost:8080/api/v1/solution", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          codeString: trimmedCode,
-          problemId: problem.problemId,
-        }),
-      });
+     const res = await fetch("http://localhost:8080/api/v1/solution", {
+       method: "POST",
+       headers: {
+         "Content-Type": "application/json",
+       },
+       body: JSON.stringify({
+         codeString: trimmedCode,
+         problemId: problem.problemId,
+         userId: resolvedUserId,
+         categoryId: resolvedCategoryId,
+       }),
+     });
+
+      const data = await res.text();
 
       if (!res.ok) {
-        throw new Error("Failed to submit solution");
+        throw new Error(data || "Failed to submit solution");
       }
 
-      const data = await res.json();
       console.log(data);
-      setOutput(JSON.stringify(data));
+      setOutput(data);
     } catch (err) {
       console.error(err);
-      setError(err.message || "Submit failed");
+      const message = err.message || "Submit failed";
+      setError(message);
+      setOutput(message);
     }
   }
 
@@ -222,7 +230,7 @@ export default function ProblemPage({ topic, problem, goBack }) {
 
             <div className="editor-actions">
               <button className="primary" type="button" onClick={handleSubmit}>
-                Submit
+                Run
               </button>
 
               <button className="secondary" type="button" onClick={goBack}>

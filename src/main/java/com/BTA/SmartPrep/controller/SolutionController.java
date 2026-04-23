@@ -17,13 +17,20 @@ public class SolutionController {
         this.solutionService = solutionService;
     }
 
+
     @PostMapping
-    public ResponseEntity<?> getSolution(@RequestBody SolutionRequestDto requestDto){
-        String codeString = requestDto.codeString();
-        long problemId = requestDto.problemId();
-        System.out.println(codeString + problemId);
-        solutionService.solutionGrade(codeString,problemId);
-        return ResponseEntity.ok("test");
+    public ResponseEntity<String> getSolution(@RequestBody SolutionRequestDto requestDto) {
+        try {
+            String grade = solutionService.solutionGrade(
+                    requestDto.codeString(),
+                    requestDto.problemId(),
+                    requestDto.userId(),
+                    requestDto.categoryId()
+            );
+            return ResponseEntity.ok(grade);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 }

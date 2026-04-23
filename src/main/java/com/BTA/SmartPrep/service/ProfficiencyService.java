@@ -9,6 +9,6 @@ import org.hibernate.sql.Update;
 public interface ProfficiencyService {
 
     Proficiency createProfficiency(CreateProfficiencyRequest request);
-    Proficiency updateProfficiency(String userID,int categoryID, UpdateProfficiencyRequest request);
+    Proficiency updateProfficiency(UpdateProfficiencyRequest request);
     ProfficiencyDto getProfficiency(String userId, int categoryID);
 }

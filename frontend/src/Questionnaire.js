@@ -95,14 +95,16 @@ export default function Questionnaire({ questions, goBack, onSubmit }) {
         console.log(proficiency);
 
         const res = await fetch(
-          `http://localhost:8080/api/v1/proficiencies/${user.userId}/${question.categoryId}`,
+          `http://localhost:8080/api/v1/proficiencies`,
           {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              proficiency,
+              userId: user.userId,
+              categoryId: question.categoryId,
+              proficiency: proficiency - 1,
             }),
           }
         );

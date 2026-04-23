@@ -1,9 +1,12 @@
 package com.BTA.SmartPrep.service.impl;
 
+import com.BTA.SmartPrep.domain.UpdateProfficiencyRequest;
+import com.BTA.SmartPrep.domain.dto.UpdateProfficiencyRequestDto;
 import com.BTA.SmartPrep.domain.entity.Problem;
 import com.BTA.SmartPrep.domain.entity.TestCase;
 import com.BTA.SmartPrep.repository.ProblemRepository;
 import com.BTA.SmartPrep.repository.TestCaseRepository;
+import com.BTA.SmartPrep.service.ProfficiencyService;
 import com.BTA.SmartPrep.service.SolutionService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,17 +29,20 @@ public class SolutionServiceImpl implements SolutionService {
     private final ProblemRepository problemRepository;
     private final TestCaseRepository testCaseRepository;
     private final ObjectMapper objectMapper;
+    private final ProfficiencyService profficiencyService;
 
     public SolutionServiceImpl(ProblemRepository problemRepository,
                                TestCaseRepository testCaseRepository,
-                               ObjectMapper objectMapper) {
+                               ObjectMapper objectMapper,
+                               ProfficiencyService profficiencyService) {
         this.problemRepository = problemRepository;
         this.testCaseRepository = testCaseRepository;
         this.objectMapper = objectMapper;
+        this.profficiencyService = profficiencyService;
     }
 
     @Override
-    public void solutionGrade(String codeString, long problemId) {
+    public String solutionGrade(String codeString, long problemId, String userId, int categoryId) {
         Problem problem = problemRepository.findById(problemId)
                 .orElseThrow(() -> new RuntimeException("Problem not found for id: " + problemId));
 
@@ -74,13 +80,29 @@ public class SolutionServiceImpl implements SolutionService {
                         " | Expected: " + testCase.getExpectedOutput() +
                         " | Actual: " + formatActualOutput(actual));
             }
-
-            System.out.println("Finished grading. Passed " + passedCount + " / " + testCases.size() + " test cases.");
+            float score = (float) passedCount / testCases.size();
+            int profficiencyChange = 0;
+            String color;
+            if(score == 1.0){
+                profficiencyChange = 7;
+                color = "green";
+            }
+            else if (score < 100 && score >= 75) {
+                profficiencyChange = 3;
+                color = "yellow";
+            }
+            else{
+                profficiencyChange = -4;
+                color = "red";
+            }
+            String grade = "Finished grading. Passed " + passedCount + " / " + testCases.size() + " test cases. \n Color Grade: " + color ;
+            UpdateProfficiencyRequest updateProfficiencyRequest = new UpdateProfficiencyRequest(userId,categoryId,profficiencyChange);
+            profficiencyService.updateProfficiency(updateProfficiencyRequest);
+            return grade;
         } catch (Exception e) {
             throw new RuntimeException("Grading failed: " + e.getMessage(), e);
         }
     }
-
     @Override
     public Path writeSourceFile(String codeString) throws IOException {
         Path tempDir = Files.createTempDirectory("smartprep_");
@@ -94,15 +116,28 @@ public class SolutionServiceImpl implements SolutionService {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 
         if (compiler == null) {
-            throw new RuntimeException("Java compiler not available. Make sure you are running with a JDK, not just a JRE.");
+            throw new RuntimeException("Java compiler not available.");
         }
 
-        int result = compiler.run(null, null, null, sourceFile.toString());
+        java.io.ByteArrayOutputStream err = new java.io.ByteArrayOutputStream();
+
+        int result = compiler.run(null, null, err, sourceFile.toString());
+
         if (result != 0) {
-            throw new RuntimeException("Compilation failed.");
+            String raw = err.toString();
+
+            String[] lines = raw.split("\n");
+            StringBuilder cleaned = new StringBuilder("Compilation Error:\n");
+
+            for (String line : lines) {
+                if (line.contains("error:")) {
+                    cleaned.append(line.substring(line.indexOf("error:") + 6)).append("\n");
+                }
+            }
+
+            throw new RuntimeException(cleaned.toString().trim());
         }
     }
-
     @Override
     public Class<?> loadSolutionClass(Path sourceFile) throws Exception {
         Path tempDir = sourceFile.getParent();

@@ -6,61 +6,70 @@ import { INTAKE_QUESTIONS } from "./Questions";
 import ProblemPage from "./ProblemPage";
 import ProblemSelection from "./ProblemSelection";
 import ChatbotPage from "./ChatbotPage";
-import { UserProvider } from "./UserContext";
+import { UserProvider, useUser } from "./UserContext";
 
-function App() {
+function AppContent() {
+  const { user } = useUser();
   const [screen, setScreen] = useState("login");
   const [selectedTopic, setSelectedTopic] = useState("");
   const [selectedProblem, setSelectedProblem] = useState(null);
 
   return (
-      <UserProvider>
-        {screen === "login" && (
-            <Login
-                goToQuestionnaire={() => {
-                  setScreen("questionnaire");
-                }}
-                goToProblemSelection={() => {
-               setScreen("problemSelection");
-                }}
-            />
-        )}
+    <>
+      {screen === "login" && (
+        <Login
+          goToQuestionnaire={() => {
+            setScreen("questionnaire");
+          }}
+          goToProblemSelection={() => {
+            setScreen("problemSelection");
+          }}
+        />
+      )}
 
-        {screen === "questionnaire" && (
-            <Questionnaire
-                questions={INTAKE_QUESTIONS}
-                goBack={() => setScreen("login")}
-                onSubmit={(payload) => {
-                  setScreen("problemSelection");
-                }}
-            />
-        )}
+      {screen === "questionnaire" && (
+        <Questionnaire
+          questions={INTAKE_QUESTIONS}
+          goBack={() => setScreen("login")}
+          onSubmit={(payload) => {
+            setScreen("problemSelection");
+          }}
+        />
+      )}
 
-        {screen === "problemSelection" && (
-                <ProblemSelection
-                  goBack={() => setScreen("questionnaire")}
-                  goToProblemPage={(problemDto, topic) => {
-                    setSelectedProblem(problemDto);
-                    setSelectedTopic(topic || "");
-                    setScreen("ProblemPage");
-                  }}
-                  goToChatbot={() => setScreen("chatbot")}
-                />
-              )}
+      {screen === "problemSelection" && (
+        <ProblemSelection
+          goBack={() => setScreen("questionnaire")}
+          goToProblemPage={(problemDto, topic) => {
+            setSelectedProblem(problemDto);
+            setSelectedTopic(topic || "");
+            setScreen("ProblemPage");
+          }}
+          goToChatbot={() => setScreen("chatbot")}
+        />
+      )}
 
-       {screen === "ProblemPage" && (
-               <ProblemPage
-                 topic={selectedTopic}
-                 problem={selectedProblem}
-                 goBack={() => setScreen("problemSelection")}
-               />
-             )}
+      {screen === "ProblemPage" && (
+        <ProblemPage
+          topic={selectedTopic}
+          problem={selectedProblem}
+          goBack={() => setScreen("problemSelection")}
+          userId={user?.userId}
+        />
+      )}
 
-        {screen === "chatbot" && (
-            <ChatbotPage goBack={() => setScreen("problemSelection")} />
-        )}
+      {screen === "chatbot" && (
+        <ChatbotPage goBack={() => setScreen("problemSelection")} />
+      )}
+    </>
+  );
+}
 
-      </UserProvider>
+function App() {
+  return (
+    <UserProvider>
+      <AppContent />
+    </UserProvider>
   );
 }
 

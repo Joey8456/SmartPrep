@@ -39,14 +39,12 @@ public class ProfficiencyController {
         return ResponseEntity.ok(profficiencyService.getProfficiency(userId, categoryId));
     }
 
-    @PutMapping(path = "/{userId}/{categoryId}")
+    @PutMapping
     public ResponseEntity<ProfficiencyDto> updateProfficiency(
-            @PathVariable String userId,
-            @PathVariable int categoryId,
             @RequestBody UpdateProfficiencyRequestDto updateProfficiencyRequestDto
     ) {
         UpdateProfficiencyRequest updateProfficiencyRequest = profficiencyMapper.fromDto(updateProfficiencyRequestDto);
-        Proficiency proficiency = profficiencyService.updateProfficiency(userId, categoryId, updateProfficiencyRequest);
+        Proficiency proficiency = profficiencyService.updateProfficiency(updateProfficiencyRequest);
         ProfficiencyDto proficiencyDto = profficiencyMapper.toDto(proficiency);
         return ResponseEntity.ok(proficiencyDto);
     }

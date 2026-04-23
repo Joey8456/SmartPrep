@@ -31,11 +31,20 @@ public class ProfficiencyServiceImpl implements ProfficiencyService {
     }
 
     @Override
-    public Proficiency updateProfficiency(String userId, int categoryId, UpdateProfficiencyRequest request) {
+    public Proficiency updateProfficiency(UpdateProfficiencyRequest request) {
         Proficiency proficiency = proficiencyRepository
-                .findByIdUserIdAndIdCategoryId(userId, categoryId)
+                .findByIdUserIdAndIdCategoryId(request.user_ID(), request.category_ID())
                 .orElseThrow(() -> new RuntimeException("Not found"));
-        proficiency.setProficiency(request.proficiency());   // or req.proficiency()
+        int profChange = request.proficiency();
+        int currentProf = proficiency.getProficiency();
+        int newProf = currentProf + profChange;
+        if (newProf <= 0){
+            newProf = 1;
+        }
+        else if (newProf > 100){
+            newProf = 100;
+        }
+        proficiency.setProficiency(newProf);   // or req.proficiency()
         return proficiencyRepository.save(proficiency);
     }
 

@@ -24,8 +24,8 @@ public class ProfficiencyMapperImpl implements ProfficiencyMapper {
     @Override
     public UpdateProfficiencyRequest fromDto(UpdateProfficiencyRequestDto dto) {
         return new UpdateProfficiencyRequest(
-                dto.user_ID(),
-                dto.category_ID(),
+                dto.userId(),
+                dto.categoryId(),
                 dto.proficiency()
         );
     }
