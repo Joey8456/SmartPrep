@@ -4,6 +4,7 @@ import "./ProblemPage.css";
 import Editor from "@monaco-editor/react";
 
 export default function ProblemPage({ topic, problem, goBack }) {
+  const [error, setError] = useState("");
   const problemData = {
     "Arrays & Strings": {
       title: "Two Sum",
@@ -77,12 +78,16 @@ export default function ProblemPage({ topic, problem, goBack }) {
         explanation: problem.prompt || "Problem prompt unavailable.",
         exampleInput: problem.examples || "No examples available.",
         exampleOutput: "",
-        testCases: problem.examples ? [problem.examples] : ["No test cases available."],
         starterCode: problem.starterCode || `class Solution {
 
 }`
       }
     : fallbackProblem;
+
+  const sampleTestCasesText =
+    problem && typeof problem.sampleTestCase === "string" && problem.sampleTestCase.trim().length > 0
+      ? problem.sampleTestCase
+      : "No test cases available.";
 
   const [code, setCode] = useState(currentProblem.starterCode);
   const [output, setOutput] = useState("Output will appear here when submitted.");
@@ -94,12 +99,36 @@ export default function ProblemPage({ topic, problem, goBack }) {
     setResultStatus(null);
   }, [topic, problem, currentProblem.starterCode]);
 
-  function handleSubmit() {
+  async function handleSubmit() {
     const trimmedCode = code.trim();
-    console.log(trimmedCode);
+    console.log("problem:", problem);
+    console.log("problem.problemId:", problem?.problemId);
+    try {
+      const res = await fetch("http://localhost:8080/api/v1/solution", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          codeString: trimmedCode,
+          problemId: problem.problemId,
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to submit solution");
+      }
+
+      const data = await res.json();
+      console.log(data);
+      setOutput(JSON.stringify(data));
+    } catch (err) {
+      console.error(err);
+      setError(err.message || "Submit failed");
+    }
   }
 
-  if (!currentProblem || !currentProblem.testCases) {
+  if (!currentProblem) {
     return (
       <main className="workspace-shell">
         <div className="workspace-layout">
@@ -151,12 +180,13 @@ export default function ProblemPage({ topic, problem, goBack }) {
             </div>
 
             <div className="workspace-section">
-              <h3>Test Cases</h3>
-              <ul className="test-case-list">
-                {(currentProblem.testCases || []).map((testCase, index) => (
-                  <li key={index}>{testCase}</li>
-                ))}
-              </ul>
+              <h3>Sample Test Cases</h3>
+              <pre
+                className="sample-test-cases-block"
+                style={{ whiteSpace: "pre-wrap", margin: 0 }}
+              >
+                {sampleTestCasesText}
+              </pre>
             </div>
           </div>
         </section>

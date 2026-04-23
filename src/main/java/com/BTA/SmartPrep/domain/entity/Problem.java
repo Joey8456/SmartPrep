@@ -11,7 +11,8 @@ public class Problem {
     public Problem() {
     }
 
-    public Problem(String problemId, String title, String prompt, String examples, ProblemDifficulty problemDifficulty, int category, String starterCode) {
+    public Problem(long problemId, String title, String prompt, String examples, ProblemDifficulty problemDifficulty, int category, String starterCode
+    ,String sampleTestCase, String methodName, String returnType,String parameterType) {
         this.problemId = problemId;
         this.title = title;
         this.prompt = prompt;
@@ -19,12 +20,15 @@ public class Problem {
         this.problemDifficulty = problemDifficulty;
         this.category = category;
         this.starterCode = starterCode;
+        this.sampleTestCase = sampleTestCase;
+        this.methodName = methodName;
+        this.returnType = returnType;
+        this.parameterType = parameterType;
     }
 
     @Id //This Annotation Says this is an ID
-    @GeneratedValue(strategy = GenerationType.UUID) //Creates ID for us, using UUID
     @Column(name = "problem_ID",updatable = false,nullable = false) //col name from DB, not Updatable, cannot be null
-    private String problemId;
+    private long problemId;
 
     @Column(name = "pTitle")
     private String title;
@@ -45,11 +49,48 @@ public class Problem {
     @Column(name = "starterCode")
     private String starterCode;
 
-    public String getProblemId() {
+
+    @Column(name = "sampleTestCase")
+    private String sampleTestCase;
+
+    public String getMethodName() {
+        return methodName;
+    }
+
+    public void setMethodName(String methodName) {
+        this.methodName = methodName;
+    }
+
+    @Column(name = "methodName")
+    private String methodName;
+
+    public String getReturnType() {
+        return returnType;
+    }
+
+    public void setReturnType(String returnType) {
+        this.returnType = returnType;
+    }
+
+    @Column(name = "returnType")
+    private String returnType;
+
+    public String getParameterType() {
+        return parameterType;
+    }
+
+    public void setParameterType(String parameterType) {
+        this.parameterType = parameterType;
+    }
+
+    @Column(name = "parameterType")
+    private String parameterType;
+
+    public long getProblemId() {
         return problemId;
     }
 
-    public void setProblemId(String problemId) {
+    public void setProblemId(long problemId) {
         this.problemId = problemId;
     }
 
@@ -99,6 +140,14 @@ public class Problem {
 
     public void setStarterCode(String starterCode) {
         this.starterCode = starterCode;
+    }
+
+    public String getSampleTestCase() {
+        return sampleTestCase;
+    }
+
+    public void setSampleTestCase(String sampleTestCase) {
+        this.sampleTestCase = sampleTestCase;
     }
 
     @Override

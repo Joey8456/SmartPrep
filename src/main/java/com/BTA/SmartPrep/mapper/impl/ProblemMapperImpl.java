@@ -15,7 +15,11 @@ public class ProblemMapperImpl implements ProblemMapper {
                 problem.getExamples(),
                 problem.getProblemDifficulty(),
                 problem.getCategory(),
-                problem.getStarterCode()
+                problem.getStarterCode(),
+                problem.getSampleTestCase(),
+                problem.getMethodName(),
+                problem.getReturnType(),
+                problem.getParameterType()
         );
     }
 }

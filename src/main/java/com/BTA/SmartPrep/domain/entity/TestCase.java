@@ -11,27 +11,13 @@ public class TestCase {
     public TestCase() {
     }
 
-    public TestCase(String testId, String testCase, String expectedOutput, Problem problem) {
+    public TestCase(String testId, int problemId, String input_args, String expectedOutput, int isHidden) {
         this.testId = testId;
-        this.testCase = testCase;
+        this.problemId = problemId;
+        this.input_args =input_args;
         this.expectedOutput = expectedOutput;
-        this.problem = problem;
+        this.is_hidden = isHidden;
     }
-
-    @Id //This Annotation Says this is an ID
-    @GeneratedValue(strategy = GenerationType.UUID) //Creates ID for us, using UUID
-    @Column(name = "submission_ID",updatable = false,nullable = false) //col name from DB, not Updatable, cannot be null
-    private String testId;
-
-    @Column(name = "testCase")
-    private String testCase;
-
-    @Column(name = "expected_Out")
-    private String expectedOutput;
-
-    @ManyToOne
-    @JoinColumn(name = "problem_ID")
-    private Problem problem;
 
     public String getTestId() {
         return testId;
@@ -41,13 +27,32 @@ public class TestCase {
         this.testId = testId;
     }
 
-    public String getTestCase() {
-        return testCase;
+    @Id //This Annotation Says this is an ID
+    @GeneratedValue(strategy = GenerationType.UUID) //Creates ID for us, using UUID
+    @Column(name = "testId",updatable = false,nullable = false) //col name from DB, not Updatable, cannot be null
+    private String testId;
+
+    public int getProblemId() {
+        return problemId;
     }
 
-    public void setTestCase(String testCase) {
-        this.testCase = testCase;
+    public void setProblemId(int problemId) {
+        this.problemId = problemId;
     }
+
+    @Column(name = "problem_ID")
+    private int problemId;
+
+    public String getInput_args() {
+        return input_args;
+    }
+
+    public void setInput_args(String input_args) {
+        this.input_args = input_args;
+    }
+
+    @Column(name = "input_args")
+    private String input_args;
 
     public String getExpectedOutput() {
         return expectedOutput;
@@ -57,13 +62,20 @@ public class TestCase {
         this.expectedOutput = expectedOutput;
     }
 
-    public Problem getProblem() {
-        return problem;
+    @Column(name = "expected_output")
+    private String expectedOutput;
+
+    public int getIs_hidden() {
+        return is_hidden;
     }
 
-    public void setProblem(Problem problem) {
-        this.problem = problem;
+    public void setIs_hidden(int is_hidden) {
+        this.is_hidden = is_hidden;
     }
+
+    @Column(name = "is_hidden")
+    private int is_hidden;
+
 
     @Override
     public boolean equals(Object o) {
@@ -75,15 +87,5 @@ public class TestCase {
     @Override
     public int hashCode() {
         return Objects.hashCode(testId);
-    }
-
-    @Override
-    public String toString() {
-        return "TestCase{" +
-                "testId=" + testId +
-                ", testCase='" + testCase + '\'' +
-                ", expectedOutput='" + expectedOutput + '\'' +
-                ", problem=" + problem +
-                '}';
     }
 }
