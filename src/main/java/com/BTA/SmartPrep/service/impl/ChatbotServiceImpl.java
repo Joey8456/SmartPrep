@@ -1,7 +1,6 @@
 package com.BTA.SmartPrep.service.impl;
-
-import com.BTA.SmartPrep.domain.dto.ChatbotEvaluateRequestDto;
-import com.BTA.SmartPrep.domain.dto.ChatbotEvaluateResponseDto;
+import com.BTA.SmartPrep.domain.dto.chatbot.ChatbotEvaluateRequestDto;
+import com.BTA.SmartPrep.domain.dto.chatbot.ChatbotEvaluateResponseDto;
 import com.BTA.SmartPrep.domain.entity.Proficiency;
 import com.BTA.SmartPrep.domain.entity.SolutionRating;
 import com.BTA.SmartPrep.domain.entity.Submission;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
 import java.util.Optional;
 import java.util.UUID;
 

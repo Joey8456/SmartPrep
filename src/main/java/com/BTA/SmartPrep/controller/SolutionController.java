@@ -1,8 +1,6 @@
 package com.BTA.SmartPrep.controller;
 
-import com.BTA.SmartPrep.domain.dto.ProfficiencyDto;
-import com.BTA.SmartPrep.domain.dto.SolutionRequestDto;
-import com.BTA.SmartPrep.domain.dto.UserDto;
+import com.BTA.SmartPrep.domain.dto.problem.SolutionRequestDto;
 import com.BTA.SmartPrep.service.SolutionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 public class SolutionController {
     SolutionService solutionService;
 
-    SolutionController(SolutionService solutionService){
+    SolutionController(SolutionService solutionService) {
         this.solutionService = solutionService;
     }
 
@@ -33,4 +31,18 @@ public class SolutionController {
         }
     }
 
+    @PostMapping("/run")
+    public ResponseEntity<String> getRunSolution(@RequestBody SolutionRequestDto requestDto) {
+        try {
+            String grade = solutionService.solutionRunGrade(
+                    requestDto.codeString(),
+                    requestDto.problemId(),
+                    requestDto.userId(),
+                    requestDto.categoryId()
+            );
+            return ResponseEntity.ok(grade);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

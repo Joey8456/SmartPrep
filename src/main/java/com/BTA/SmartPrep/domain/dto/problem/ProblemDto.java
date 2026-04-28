@@ -1,4 +1,4 @@
-package com.BTA.SmartPrep.domain.dto;
+package com.BTA.SmartPrep.domain.dto.problem;
 
 import com.BTA.SmartPrep.domain.entity.ProblemDifficulty;
 
@@ -13,6 +13,7 @@ public record ProblemDto (
         String sampleTestCase,
         String methodName,
         String returnType,
-        String parameterType
+        String parameterType,
+        String sampleExpectedOutput
 ) {
 }

@@ -2,9 +2,9 @@ package com.BTA.SmartPrep.mapper.impl;
 
 import com.BTA.SmartPrep.domain.CreateUserRequest;
 import com.BTA.SmartPrep.domain.UpdateUserRequest;
-import com.BTA.SmartPrep.domain.dto.CreateUserRequestDto;
-import com.BTA.SmartPrep.domain.dto.UpdateUserRequestDto;
-import com.BTA.SmartPrep.domain.dto.UserDto;
+import com.BTA.SmartPrep.domain.dto.user.CreateUserRequestDto;
+import com.BTA.SmartPrep.domain.dto.user.UpdateUserRequestDto;
+import com.BTA.SmartPrep.domain.dto.user.UserDto;
 import com.BTA.SmartPrep.domain.entity.User;
 import com.BTA.SmartPrep.mapper.UserMapper;
 import org.springframework.stereotype.Component;

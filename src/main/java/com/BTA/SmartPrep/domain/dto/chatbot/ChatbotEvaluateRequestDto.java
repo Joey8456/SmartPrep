@@ -1,4 +1,4 @@
-package com.BTA.SmartPrep.domain.dto;
+package com.BTA.SmartPrep.domain.dto.chatbot;
 
 public record ChatbotEvaluateRequestDto(
         String userId,

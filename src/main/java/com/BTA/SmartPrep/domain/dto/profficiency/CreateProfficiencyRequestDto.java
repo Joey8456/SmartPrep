@@ -1,4 +1,4 @@
-package com.BTA.SmartPrep.domain.dto;
+package com.BTA.SmartPrep.domain.dto.profficiency;
 
 public record CreateProfficiencyRequestDto(
     String user_ID,

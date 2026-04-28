@@ -12,7 +12,7 @@ public class Problem {
     }
 
     public Problem(long problemId, String title, String prompt, String examples, ProblemDifficulty problemDifficulty, int category, String starterCode
-    ,String sampleTestCase, String methodName, String returnType,String parameterType) {
+    ,String sampleTestCase, String methodName, String returnType,String parameterType, String expectedOutput) {
         this.problemId = problemId;
         this.title = title;
         this.prompt = prompt;
@@ -24,6 +24,7 @@ public class Problem {
         this.methodName = methodName;
         this.returnType = returnType;
         this.parameterType = parameterType;
+        this.expectedOutput = expectedOutput;
     }
 
     @Id //This Annotation Says this is an ID
@@ -52,6 +53,17 @@ public class Problem {
 
     @Column(name = "sampleTestCase")
     private String sampleTestCase;
+
+    public String getExpectedOutput() {
+        return expectedOutput;
+    }
+
+    public void setExpectedOutput(String expectedOutput) {
+        this.expectedOutput = expectedOutput;
+    }
+
+    @Column(name = "sampleExpectedOutput")
+    private String expectedOutput;
 
     public String getMethodName() {
         return methodName;

@@ -1,14 +1,12 @@
 package com.BTA.SmartPrep.mapper.impl;
 
 import com.BTA.SmartPrep.domain.CreateProfficiencyRequest;
-import com.BTA.SmartPrep.domain.CreateUserRequest;
 import com.BTA.SmartPrep.domain.UpdateProfficiencyRequest;
-import com.BTA.SmartPrep.domain.UpdateUserRequest;
-import com.BTA.SmartPrep.domain.dto.*;
+import com.BTA.SmartPrep.domain.dto.profficiency.CreateProfficiencyRequestDto;
+import com.BTA.SmartPrep.domain.dto.profficiency.ProfficiencyDto;
+import com.BTA.SmartPrep.domain.dto.profficiency.UpdateProfficiencyRequestDto;
 import com.BTA.SmartPrep.domain.entity.Proficiency;
-import com.BTA.SmartPrep.domain.entity.User;
 import com.BTA.SmartPrep.mapper.ProfficiencyMapper;
-import com.BTA.SmartPrep.mapper.UserMapper;
 import org.springframework.stereotype.Component;
 
 @Component //Marks as bean

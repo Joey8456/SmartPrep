@@ -3,7 +3,7 @@ import "./Login.css";
 import { useState } from "react";
 import { useUser } from "./UserContext";
 
-export default function Login({ goToQuestionnaire,goToProblemSelection}) {
+export default function Login({ goToQuestionnaire, goToProblemSelection }) {
   const [form, setForm] = useState({
     email: "",
     username: "",
@@ -32,16 +32,18 @@ export default function Login({ goToQuestionnaire,goToProblemSelection}) {
 
     if (isLogin) {
       try {
-        const url = `http://localhost:8080/api/v1/users/${encodeURIComponent(form.email)}/${encodeURIComponent(form.password)}`;
+       const url = "http://localhost:8080/api/v1/users/login";
 
-        console.log("Logging in to:", url);
-
-        const res = await fetch(url, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+       const res = await fetch(url, {
+         method: "POST",
+         headers: {
+           "Content-Type": "application/json",
+         },
+         body: JSON.stringify({
+           email: form.email,
+           password: form.password
+         }),
+       });
 
         if (!res.ok) {
           throw new Error("Invalid email or password");
@@ -57,40 +59,35 @@ export default function Login({ goToQuestionnaire,goToProblemSelection}) {
         setError(err.message || "Login failed");
         return;
       }
-    }
-    else{
-    try {
-   const url = "http://localhost:8080/api/v1/users";
+    } else {
+      try {
+        const url = "http://localhost:8080/api/v1/users";
 
-   console.log("Submitting to:", url);
 
-   const res = await fetch(url, {
-     method: "POST",
-     headers: {
-       "Content-Type": "application/json",
-     },
-     body: JSON.stringify({
-       username: form.username,
-       email: form.email,
-       passhash: form.password
-     }),
-   });
+        const res = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: form.username,
+            email: form.email,
+            passhash: form.password
+          }),
+        });
 
-      if (!res.ok) {
-        throw new Error("Failed to create user");
-      }
+        if (!res.ok) {
+          throw new Error("Failed to create user");
+        }
 
-      const createdUser = await res.json();
+        const createdUser = await res.json();
 
-      console.log(createdUser);
-      console.log(createdUser.userId);
-      setUser(createdUser);
-      goToQuestionnaire();
-      return;
-    }
-    catch (err) {
-      console.error(err);
-      setError(err.message || "Failed to connect to server");
+        setUser(createdUser);
+        goToQuestionnaire();
+        return;
+      } catch (err) {
+        console.error(err);
+        setError(err.message || "Failed to connect to server");
       }
     }
   }

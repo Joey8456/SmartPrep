@@ -1,17 +1,23 @@
 .selection-shell {
   min-height: 100vh;
+  width: 100%;
   padding: 24px;
+  box-sizing: border-box;
+  background: radial-gradient(1200px 600px at 10% -10%, rgba(124,92,255,0.25), transparent 60%),
+              radial-gradient(800px 400px at 110% 10%, rgba(90,139,255,0.2), transparent 60%),
+              #0b1220;
 }
 
 .selection-card {
-  max-width: 1050px;
-  margin: 0 auto;
-  padding: 22px;
-  border-radius: 20px;
-  background: rgba(18, 26, 51, 0.82);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.45);
+  width: 100%;
+  min-height: calc(100vh - 48px);
+  padding: 24px;
+  border-radius: 22px;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, rgba(18, 26, 51, 0.9), rgba(12, 18, 40, 0.9));
+  border: 1px solid rgba(124, 92, 255, 0.25);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55), 0 0 40px rgba(124, 92, 255, 0.12);
 }
 
 .selection-topbar {
@@ -39,6 +45,41 @@
   display: grid;
   grid-template-columns: 1.3fr 0.9fr;
   gap: 18px;
+  align-items: start;
+}
+
+.dashboard-layout {
+  grid-template-columns: minmax(360px, 1.15fr) minmax(320px, 0.85fr);
+}
+
+.problem-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.panel-label {
+  font-size: 14px;
+  color: #9fb0ff;
+  margin-bottom: 4px;
+}
+
+.topic-scroll-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: calc(100vh - 230px);
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.topic-scroll-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.topic-scroll-list::-webkit-scrollbar-thumb {
+  background: rgba(124,92,255,0.4);
+  border-radius: 999px;
 }
 
 .selection-left,
@@ -53,17 +94,17 @@
   text-align: left;
   padding: 18px;
   border-radius: 16px;
-  background: rgba(10, 14, 28, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(10, 14, 28, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   color: #eaf0ff;
-  transition: transform 0.15s ease, background 0.2s ease, border-color 0.2s ease;
+  transition: transform 0.18s ease, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .topic-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px) scale(1.01);
   background: rgba(255, 255, 255, 0.08);
-  transform: translateY(-2px);
-
+  border-color: rgba(124, 92, 255, 0.45);
+  box-shadow: 0 12px 30px rgba(124, 92, 255, 0.25);
 }
 
 .topic-title {
@@ -96,6 +137,8 @@
   height: 100%;
   border-radius: 999px;
   background: linear-gradient(135deg, #7c5cff, #5a8bff);
+  box-shadow: 0 0 10px rgba(124, 92, 255, 0.5);
+  transition: width 0.4s ease;
 }
 
 .side-action-btn {
@@ -114,6 +157,77 @@
   color: #eaf0ff;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.practice-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.feature-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #eaf0ff;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 30px rgba(124, 92, 255, 0.25);
+}
+
+.feature-eyebrow {
+  font-size: 12px;
+  color: #9fb0ff;
+  text-transform: uppercase;
+}
+
+.feature-title {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.feature-copy {
+  font-size: 13px;
+  color: #c8d4f4;
+}
+
+.random-problem-btn {
+  margin-top: 10px;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  background: linear-gradient(135deg, #7c5cff, #5a8bff);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(124, 92, 255, 0.35);
+}
+
+.random-problem-btn:hover {
+  transform: translateY(-2px);
+}
+
+.back-link-btn {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  color: #9fb0ff;
+  cursor: pointer;
+}
+
+.back-link-btn:hover {
+  text-decoration: underline;
 }
 
 @media (max-width: 900px) {

@@ -2,14 +2,12 @@ package com.BTA.SmartPrep.service.impl;
 
 import com.BTA.SmartPrep.domain.CreateProfficiencyRequest;
 import com.BTA.SmartPrep.domain.UpdateProfficiencyRequest;
-import com.BTA.SmartPrep.domain.dto.ProfficiencyDto;
+import com.BTA.SmartPrep.domain.dto.profficiency.ProfficiencyDto;
 import com.BTA.SmartPrep.domain.entity.Proficiency;
 import com.BTA.SmartPrep.mapper.ProfficiencyMapper;
 import com.BTA.SmartPrep.repository.ProficiencyRepository;
 import com.BTA.SmartPrep.service.ProfficiencyService;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class ProfficiencyServiceImpl implements ProfficiencyService {

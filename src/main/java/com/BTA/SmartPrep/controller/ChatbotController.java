@@ -1,7 +1,7 @@
 package com.BTA.SmartPrep.controller;
 
-import com.BTA.SmartPrep.domain.dto.ChatbotEvaluateRequestDto;
-import com.BTA.SmartPrep.domain.dto.ChatbotEvaluateResponseDto;
+import com.BTA.SmartPrep.domain.dto.chatbot.ChatbotEvaluateRequestDto;
+import com.BTA.SmartPrep.domain.dto.chatbot.ChatbotEvaluateResponseDto;
 import com.BTA.SmartPrep.service.ChatbotService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

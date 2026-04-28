@@ -3,7 +3,7 @@ import "./App.css";
 import "./ProblemPage.css";
 import Editor from "@monaco-editor/react";
 
-export default function ProblemPage({ topic, problem, goBack, userId }) {
+export default function ProblemPage({ topic, problem, goBack, userId, onSubmit }) {
   const [error, setError] = useState("");
   const problemData = {
     "Arrays & Strings": {
@@ -102,37 +102,85 @@ export default function ProblemPage({ topic, problem, goBack, userId }) {
     setResultStatus(null);
   }, [topic, problem, currentProblem.starterCode]);
 
-  async function handleSubmit() {
+  async function handleRun() {
     const trimmedCode = code.trim();
-    console.log("problem:", problem);
-    console.log("problem.problemId:", problem?.problemId);
+
     try {
-     const res = await fetch("http://localhost:8080/api/v1/solution", {
-       method: "POST",
-       headers: {
-         "Content-Type": "application/json",
-       },
-       body: JSON.stringify({
-         codeString: trimmedCode,
-         problemId: problem.problemId,
-         userId: resolvedUserId,
-         categoryId: resolvedCategoryId,
-       }),
-     });
+      const res = await fetch("http://localhost:8080/api/v1/solution/run", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          codeString: trimmedCode,
+          problemId: problem.problemId,
+          userId: resolvedUserId,
+          categoryId: resolvedCategoryId,
+        }),
+      });
 
       const data = await res.text();
 
       if (!res.ok) {
-        throw new Error(data || "Failed to submit solution");
+        throw new Error(data || "Failed to run solution");
       }
 
-      console.log(data);
       setOutput(data);
     } catch (err) {
-      console.error(err);
+      const message = err.message || "Run failed";
+      setError(message);
+      setOutput(message);
+    }
+  }
+
+  async function handleSubmit() {
+    const trimmedCode = code.trim();
+
+    try {
+      const res = await fetch("http://localhost:8080/api/v1/solution", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          codeString: trimmedCode,
+          problemId: problem.problemId,
+          userId: resolvedUserId,
+          categoryId: resolvedCategoryId,
+        }),
+      });
+
+      const raw = await res.text();
+      let data;
+      try {
+        data = JSON.parse(raw);
+      } catch {
+        data = { raw };
+      }
+
+      if (!res.ok) {
+        throw new Error(typeof data === "string" ? data : JSON.stringify(data) || "Failed to submit solution");
+      }
+
+      setOutput(typeof data === "string" ? data : JSON.stringify(data));
+
+      // Normalize results shape for ResultsPage
+      const formattedResults = {
+        passed: data.passed ?? 0,
+        total: data.total ?? 0,
+        testCases: data.testCases ?? []
+      };
+
+      if (onSubmit) {
+        onSubmit(formattedResults);
+      }
+    } catch (err) {
       const message = err.message || "Submit failed";
       setError(message);
       setOutput(message);
+      if (onSubmit) {
+        onSubmit({ passed: 0, total: 0, testCases: [] });
+      }
     }
   }
 
@@ -176,15 +224,23 @@ export default function ProblemPage({ topic, problem, goBack, userId }) {
             </div>
 
             <div className="workspace-section">
-              <h3>Example</h3>
-              <p>
-                <strong>Example:</strong> {currentProblem.exampleInput}
+              <h3>Run Test Case</h3>
+              <p style={{ fontSize: "0.9rem", color: "#9fb0ff" }}>
+                This is the test case used when you click <strong>Run</strong>.
+                Use it to debug your solution before submitting.
               </p>
-              {currentProblem.exampleOutput ? (
+
+              <div className="example-box">
                 <p>
-                  <strong>Output:</strong> {currentProblem.exampleOutput}
+                  <strong>Input:</strong> {currentProblem.exampleInput}
                 </p>
-              ) : null}
+
+                {currentProblem.exampleOutput ? (
+                  <p>
+                    <strong>Expected Output:</strong> {currentProblem.exampleOutput}
+                  </p>
+                ) : null}
+              </div>
             </div>
 
             <div className="workspace-section">
@@ -229,7 +285,7 @@ export default function ProblemPage({ topic, problem, goBack, userId }) {
             </div>
 
             <div className="editor-actions">
-              <button className="primary" type="button" onClick={handleSubmit}>
+              <button className="primary" type="button" onClick={handleRun}>
                 Run
               </button>
 
@@ -243,6 +299,13 @@ export default function ProblemPage({ topic, problem, goBack, userId }) {
             <h3>Output</h3>
             <p>{output}</p>
           </div>
+          <button
+            type="button"
+            className="submit-solution-btn"
+            onClick={handleSubmit}
+          >
+            🚀 Submit Final Answer
+          </button>
         </section>
       </div>
     </main>

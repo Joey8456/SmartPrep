@@ -1,4 +1,4 @@
-package com.BTA.SmartPrep.domain.dto;
+package com.BTA.SmartPrep.domain.dto.user;
 
 
 //TODO GET NOT BLANK AND LENGTH TO WORK FOR EASY VALIDATION

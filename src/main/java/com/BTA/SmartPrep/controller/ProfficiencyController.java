@@ -2,22 +2,13 @@ package com.BTA.SmartPrep.controller;
 
 
 import com.BTA.SmartPrep.domain.UpdateProfficiencyRequest;
-import com.BTA.SmartPrep.domain.dto.ProfficiencyDto;
-import com.BTA.SmartPrep.domain.dto.UpdateProfficiencyRequestDto;
-import com.BTA.SmartPrep.domain.dto.UserDto;
+import com.BTA.SmartPrep.domain.dto.profficiency.ProfficiencyDto;
+import com.BTA.SmartPrep.domain.dto.profficiency.UpdateProfficiencyRequestDto;
 import com.BTA.SmartPrep.domain.entity.Proficiency;
-import com.BTA.SmartPrep.domain.entity.User;
 import com.BTA.SmartPrep.mapper.ProfficiencyMapper;
-import com.BTA.SmartPrep.mapper.UserMapper;
-import com.BTA.SmartPrep.repository.ProficiencyRepository;
-import com.BTA.SmartPrep.repository.UserRepository;
 import com.BTA.SmartPrep.service.ProfficiencyService;
-import com.BTA.SmartPrep.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController //Tells spring look at this for API

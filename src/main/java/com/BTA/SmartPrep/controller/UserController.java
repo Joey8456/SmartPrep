@@ -1,23 +1,17 @@
 package com.BTA.SmartPrep.controller;
 
-import com.BTA.SmartPrep.domain.CreateProfficiencyRequest;
 import com.BTA.SmartPrep.domain.CreateUserRequest;
-import com.BTA.SmartPrep.domain.UpdateUserRequest;
-import com.BTA.SmartPrep.domain.dto.CreateUserRequestDto;
-import com.BTA.SmartPrep.domain.dto.ProblemDto;
-import com.BTA.SmartPrep.domain.dto.UpdateUserRequestDto;
-import com.BTA.SmartPrep.domain.dto.UserDto;
-import com.BTA.SmartPrep.domain.entity.Proficiency;
+import com.BTA.SmartPrep.domain.dto.user.CreateUserRequestDto;
+import com.BTA.SmartPrep.domain.dto.user.UserDto;
+import com.BTA.SmartPrep.domain.dto.user.UserLoginRequestDto;
 import com.BTA.SmartPrep.domain.entity.User;
 import com.BTA.SmartPrep.mapper.UserMapper;
-import com.BTA.SmartPrep.repository.UserRepository;
 import com.BTA.SmartPrep.service.ProfficiencyService;
 import com.BTA.SmartPrep.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
+
 import java.util.Optional;
 import java.util.UUID;
 
@@ -51,27 +45,15 @@ public class UserController {
     public ResponseEntity<Optional<UserDto>> getRandomProblemByCategory(
             @PathVariable UUID userId
     ) {
-
         return ResponseEntity.ok(userService.getUser(userId));
     }
-    @GetMapping("/{email}/{passhash}")
+
+    @PostMapping("/login")
     public ResponseEntity<UserDto> getUser(
-            @PathVariable String email,
-            @PathVariable String passhash
+            @RequestBody UserLoginRequestDto userLoginRequestDto
     ){
-        User user = userService.getUserLogin(email,passhash);
+        User user = userService.getUserLogin(userLoginRequestDto.email(), userLoginRequestDto.password());
         UserDto userDto = userMapper.toDto(user);
         return ResponseEntity.ok(userDto);
     }
-    //TODO implement this
-//    @PutMapping(path = "/{userId}")
-//    public ResponseEntity<UserDto> updateUser(
-//            @PathVariable UUID userId,
-//    @RequestBody UpdateUserRequestDto updateUserRequestDto
-//    )33
-//        UpdateUserRequest updateUserRequest = userMapper.fromDto(updateUserRequestDto);
-//        User user= userService.updateUser(userId,updateUserRequest);
-//        UserDto userDto = userMapper.toDto(user);
-//        return ResponseEntity.ok(userDto);
-//    }
 }

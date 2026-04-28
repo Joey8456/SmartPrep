@@ -1,6 +1,6 @@
 package com.BTA.SmartPrep.service.impl;
 
-import com.BTA.SmartPrep.domain.dto.ProblemDto;
+import com.BTA.SmartPrep.domain.dto.problem.ProblemDto;
 import com.BTA.SmartPrep.domain.entity.Problem;
 import com.BTA.SmartPrep.domain.entity.Proficiency;
 import com.BTA.SmartPrep.mapper.ProblemMapper;

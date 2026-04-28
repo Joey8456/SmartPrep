@@ -1,7 +1,6 @@
 package com.BTA.SmartPrep.controller;
 
-import com.BTA.SmartPrep.domain.dto.ProblemDto;
-import com.BTA.SmartPrep.domain.dto.ProfficiencyDto;
+import com.BTA.SmartPrep.domain.dto.problem.ProblemDto;
 import com.BTA.SmartPrep.service.ProblemService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

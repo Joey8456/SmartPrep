@@ -1,7 +1,6 @@
 package com.BTA.SmartPrep.service.impl;
 
 import com.BTA.SmartPrep.domain.UpdateProfficiencyRequest;
-import com.BTA.SmartPrep.domain.dto.UpdateProfficiencyRequestDto;
 import com.BTA.SmartPrep.domain.entity.Problem;
 import com.BTA.SmartPrep.domain.entity.TestCase;
 import com.BTA.SmartPrep.repository.ProblemRepository;
@@ -103,6 +102,52 @@ public class SolutionServiceImpl implements SolutionService {
             throw new RuntimeException("Grading failed: " + e.getMessage(), e);
         }
     }
+
+    @Override
+    public String solutionRunGrade(String codeString, long problemId, String userId, int categoryId) {
+        Problem problem = problemRepository.findById(problemId)
+                .orElseThrow(() -> new RuntimeException("Problem not found for id: " + problemId));
+
+        if (problem.getExamples() == null || problem.getExamples().isBlank()) {
+            throw new RuntimeException("No sample input found for problem id: " + problemId);
+        }
+
+        if (problem.getExpectedOutput() == null || problem.getExpectedOutput().isBlank()) {
+            throw new RuntimeException("No sample expected output found for problem id: " + problemId);
+        }
+
+        try {
+            Path sourceFile = writeSourceFile(codeString);
+            compile(sourceFile);
+            Class<?> solutionClass = loadSolutionClass(sourceFile);
+
+            Class<?>[] parameterTypes = parseParameterTypes(problem.getParameterType());
+            Method method = solutionClass.getDeclaredMethod(problem.getMethodName(), parameterTypes);
+            method.setAccessible(true);
+
+            Constructor<?> constructor = solutionClass.getDeclaredConstructor();
+            constructor.setAccessible(true);
+            Object solutionInstance = constructor.newInstance();
+
+            Object[] args = parseArguments(problem.getExamples(), parameterTypes);
+            Object actual = method.invoke(solutionInstance, args);
+
+            boolean passed = compareOutput(actual, problem.getExpectedOutput(), method.getReturnType());
+
+            if (passed) {
+                return "Run passed. Sample test case passed.\nOutput: " + formatActualOutput(actual);
+            }
+
+            return "Run failed. Sample test case did not pass.\nExpected: "
+                    + problem.getExpectedOutput()
+                    + "\nActual: "
+                    + formatActualOutput(actual);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Run failed: " + e.getMessage(), e);
+        }
+    }
+
     @Override
     public Path writeSourceFile(String codeString) throws IOException {
         Path tempDir = Files.createTempDirectory("smartprep_");
@@ -162,8 +207,12 @@ public class SolutionServiceImpl implements SolutionService {
     public Object[] parseArguments(String inputArgsJson, Class<?>[] parameterTypes) throws IOException {
         JsonNode root = objectMapper.readTree(inputArgsJson);
 
+        if (parameterTypes.length == 1) {
+            return new Object[]{convertJsonNode(root, parameterTypes[0])};
+        }
+
         if (!root.isArray()) {
-            throw new IllegalArgumentException("input_args must be a JSON array.");
+            throw new IllegalArgumentException("input_args must be a JSON array for methods with multiple parameters.");
         }
 
         if (root.size() != parameterTypes.length) {

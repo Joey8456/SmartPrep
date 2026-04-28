@@ -7,12 +7,14 @@ import ProblemPage from "./ProblemPage";
 import ProblemSelection from "./ProblemSelection";
 import ChatbotPage from "./ChatbotPage";
 import { UserProvider, useUser } from "./UserContext";
+import ResultsPage from "./ResultsPage";
 
 function AppContent() {
   const { user } = useUser();
   const [screen, setScreen] = useState("login");
   const [selectedTopic, setSelectedTopic] = useState("");
   const [selectedProblem, setSelectedProblem] = useState(null);
+  const [problemResults, setProblemResults] = useState(null);
 
   return (
     <>
@@ -37,6 +39,13 @@ function AppContent() {
         />
       )}
 
+      {screen === "results" && (
+        <ResultsPage
+          result={problemResults}
+          goBack={() => setScreen("problemSelection")}
+        />
+      )}
+
       {screen === "problemSelection" && (
         <ProblemSelection
           goBack={() => setScreen("questionnaire")}
@@ -53,8 +62,12 @@ function AppContent() {
         <ProblemPage
           topic={selectedTopic}
           problem={selectedProblem}
-          goBack={() => setScreen("problemSelection")}
           userId={user?.userId}
+          onSubmit={(resultData) => {
+            setProblemResults(resultData || null);
+            setScreen("results");
+          }}
+          goBack={() => setScreen("problemSelection")}
         />
       )}
 

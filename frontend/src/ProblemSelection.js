@@ -93,34 +93,36 @@ export default function ProblemSelection({ goToProblemPage, goBack, goToChatbot 
           <div className="selection-user">@{user?.username || "username"}</div>
         </div>
 
-        <div className="selection-layout">
-          <section className="selection-left">
-            {topics.map((topic) => (
-              <button
-                key={topic.key}
-                type="button"
-                className="topic-card"
-                onClick={() => handleTopicSelect(topic)}
-              >
-                <div className="topic-title">{topic.label}</div>
+        <div className="selection-layout dashboard-layout">
+          <section className="problem-panel">
+            <div className="panel-label">Choose a coding topic</div>
 
-                <div className="topic-progress-row">
-                  <span className="topic-progress-label">{topic.progress}%</span>
-                  <div className="topic-progress-track">
-                    <div
-                      className="topic-progress-fill"
-                      style={{ width: `${topic.progress}%` }}
-                    ></div>
+            <div className="topic-scroll-list">
+              {topics.map((topic) => (
+                <button
+                  key={topic.key}
+                  type="button"
+                  className="topic-card"
+                  onClick={() => handleTopicSelect(topic)}
+                >
+                  <div className="topic-title">{topic.label}</div>
+
+                  <div className="topic-progress-row">
+                    <span className="topic-progress-label">{topic.progress}%</span>
+                    <div className="topic-progress-track">
+                      <div
+                        className="topic-progress-fill"
+                        style={{ width: `${topic.progress}%` }}
+                      ></div>
+                    </div>
                   </div>
-                </div>
-              </button>
-            ))}
-          </section>
+                </button>
+              ))}
+            </div>
 
-          <section className="selection-right">
             <button
               type="button"
-              className="side-action-btn primary-side-btn"
+              className="random-problem-btn"
               onClick={() => {
                 const randomTopic = topics[Math.floor(Math.random() * topics.length)];
                 handleTopicSelect(randomTopic);
@@ -136,22 +138,32 @@ export default function ProblemSelection({ goToProblemPage, goBack, goToChatbot 
             {problemError && (
               <div className="selection-status error-text">{problemError}</div>
             )}
+          </section>
 
+          <section className="practice-panel">
             <button
               type="button"
-              className="side-action-btn secondary-side-btn"
+              className="feature-card interview-card"
               onClick={goToChatbot}
             >
-              AI Chatbot
+              <span className="feature-eyebrow">AI Practice</span>
+              <span className="feature-title">Interview Question Practice</span>
+              <span className="feature-copy">
+                Practice technical interview questions with AI feedback.
+              </span>
             </button>
 
             <button
               type="button"
-              className="side-action-btn secondary-side-btn"
-              onClick={goBack}
+              className="feature-card submissions-card"
             >
-              Back
+              <span className="feature-eyebrow">History</span>
+              <span className="feature-title">View Previous Submissions</span>
+              <span className="feature-copy">
+                Review past answers, scores, and progress.
+              </span>
             </button>
+
           </section>
         </div>
       </div>
