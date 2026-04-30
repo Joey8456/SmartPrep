@@ -133,41 +133,56 @@ public class ChatbotServiceImpl implements ChatbotService {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         String requestBody = String.format("""
+        {
+          "contents": [
             {
-              "contents": [
-                {
-                  "parts": [
-                    { "text": %s }
-                  ]
-                }
+              "parts": [
+                { "text": %s }
               ]
             }
-            """, objectMapper.valueToTree(prompt).toString());
+          ]
+        }
+        """, objectMapper.valueToTree(prompt).toString());
 
         HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
 
-        try {
-            ResponseEntity<String> response = restTemplate.postForEntity(
-                    GEMINI_URL + geminiApiKey,
-                    entity,
-                    String.class
-            );
+        int maxRetries = 3;
 
-            JsonNode root = objectMapper.readTree(response.getBody());
-            return root
-                    .path("candidates").get(0)
-                    .path("content")
-                    .path("parts").get(0)
-                    .path("text").asText();
+        for (int attempt = 0; attempt < maxRetries; attempt++) {
+            try {
+                ResponseEntity<String> response = restTemplate.postForEntity(
+                        GEMINI_URL + geminiApiKey,
+                        entity,
+                        String.class
+                );
 
-        } catch (org.springframework.web.client.HttpClientErrorException e) {
-            if (e.getStatusCode().value() == 429) {
-                throw new RuntimeException("RATE_LIMITED");
+                JsonNode root = objectMapper.readTree(response.getBody());
+                return root
+                        .path("candidates").get(0)
+                        .path("content")
+                        .path("parts").get(0)
+                        .path("text").asText();
+
+            } catch (org.springframework.web.client.HttpServerErrorException.ServiceUnavailable e) {
+                // 🔥 503 retry
+                try {
+                    Thread.sleep(1000 * (attempt + 1)); // backoff
+                } catch (InterruptedException ignored) {}
+            } catch (org.springframework.web.client.HttpClientErrorException e) {
+                if (e.getStatusCode().value() == 429) {
+                    throw new RuntimeException("RATE_LIMITED");
+                }
+                throw new RuntimeException("Gemini API error: " + e.getStatusCode(), e);
+            } catch (Exception e) {
+                // final fallback
+                if (attempt == maxRetries - 1) {
+                    return "{\"relevance\":10,\"correctness\":10,\"completeness\":10,\"clarity\":10,\"feedback\":\"AI temporarily unavailable. Try again.\"}";
+                }
             }
-            throw new RuntimeException("Gemini API error: " + e.getStatusCode(), e);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to reach Gemini API", e);
         }
+
+        // fallback safety
+        return "{\"relevance\":10,\"correctness\":10,\"completeness\":10,\"clarity\":10,\"feedback\":\"AI temporarily unavailable.\"}";
     }
 
     private void updateProficiency(String userId, int categoryId, SolutionRating rating) {

@@ -1,6 +1,7 @@
 package com.BTA.SmartPrep.service.impl;
 
 import com.BTA.SmartPrep.domain.UpdateProfficiencyRequest;
+import com.BTA.SmartPrep.domain.dto.problem.SolutionSubmissionDto;
 import com.BTA.SmartPrep.domain.entity.Problem;
 import com.BTA.SmartPrep.domain.entity.TestCase;
 import com.BTA.SmartPrep.repository.ProblemRepository;
@@ -20,6 +21,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -41,7 +43,7 @@ public class SolutionServiceImpl implements SolutionService {
     }
 
     @Override
-    public String solutionGrade(String codeString, long problemId, String userId, int categoryId) {
+    public SolutionSubmissionDto solutionGrade(String codeString, long problemId, String userId, int categoryId) {
         Problem problem = problemRepository.findById(problemId)
                 .orElseThrow(() -> new RuntimeException("Problem not found for id: " + problemId));
 
@@ -49,7 +51,7 @@ public class SolutionServiceImpl implements SolutionService {
         if (testCases.isEmpty()) {
             throw new RuntimeException("No test cases found for problem id: " + problemId);
         }
-
+        double runTimeMs = 0;
         try {
             Path sourceFile = writeSourceFile(codeString);
             compile(sourceFile);
@@ -60,7 +62,9 @@ public class SolutionServiceImpl implements SolutionService {
             method.setAccessible(true);
 
             int passedCount = 0;
+            List<TestCase> failedCases = new ArrayList<>();
 
+            double startTime = System.nanoTime();
             for (TestCase testCase : testCases) {
                 Constructor<?> constructor = solutionClass.getDeclaredConstructor();
                 constructor.setAccessible(true);
@@ -72,6 +76,12 @@ public class SolutionServiceImpl implements SolutionService {
                 if (passed) {
                     passedCount++;
                 }
+                else{
+                    failedCases.add(testCase);
+                }
+
+                double endTime = System.nanoTime();
+                runTimeMs = (endTime - startTime) / 1_000_000;
 
                 System.out.println("Problem " + problemId +
                         " | TestCase " + testCase.getTestId() +
@@ -79,25 +89,43 @@ public class SolutionServiceImpl implements SolutionService {
                         " | Expected: " + testCase.getExpectedOutput() +
                         " | Actual: " + formatActualOutput(actual));
             }
+            String runtimeLogic = "";
+            if (runTimeMs <= 100) {
+                runtimeLogic = "Good";
+            } else {
+                runtimeLogic = "Poor";
+            }
+
             float score = (float) passedCount / testCases.size();
             int profficiencyChange = 0;
             String color;
+            String message = "";
             if(score == 1.0){
-                profficiencyChange = 7;
-                color = "green";
+                if(runtimeLogic.equals("Poor")){
+                    profficiencyChange = 3;
+                    color = "yellow";
+                    message = "Improve efficiency of solution!";
+                }
+                else {
+                    profficiencyChange = 7;
+                    color = "green";
+                }
             }
             else if (score < 100 && score >= 75) {
                 profficiencyChange = 3;
                 color = "yellow";
             }
-            else{
+            else {
                 profficiencyChange = -4;
                 color = "red";
             }
-            String grade = "Finished grading. Passed " + passedCount + " / " + testCases.size() + " test cases. \n Color Grade: " + color ;
+
+
+
             UpdateProfficiencyRequest updateProfficiencyRequest = new UpdateProfficiencyRequest(userId,categoryId,profficiencyChange);
             profficiencyService.updateProfficiency(updateProfficiencyRequest);
-            return grade;
+            SolutionSubmissionDto solutionSubmissionDto = new SolutionSubmissionDto(color,passedCount,testCases.size(),score,failedCases, message,runTimeMs,runtimeLogic);
+            return solutionSubmissionDto;
         } catch (Exception e) {
             throw new RuntimeException("Grading failed: " + e.getMessage(), e);
         }
@@ -208,7 +236,16 @@ public class SolutionServiceImpl implements SolutionService {
         JsonNode root = objectMapper.readTree(inputArgsJson);
 
         if (parameterTypes.length == 1) {
-            return new Object[]{convertJsonNode(root, parameterTypes[0])};
+            JsonNode actualNode = root;
+
+            // Only unwrap single-item arrays when the method parameter is NOT an array.
+            // Example: [121] can become 121 for int x.
+            // But [1,2,3,1] must stay as an array for int[] nums.
+            if (!parameterTypes[0].isArray() && root.isArray() && root.size() == 1) {
+                actualNode = root.get(0);
+            }
+
+            return new Object[]{convertJsonNode(actualNode, parameterTypes[0])};
         }
 
         if (!root.isArray()) {

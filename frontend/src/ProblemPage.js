@@ -5,92 +5,20 @@ import Editor from "@monaco-editor/react";
 
 export default function ProblemPage({ topic, problem, goBack, userId, onSubmit }) {
   const [error, setError] = useState("");
-  const problemData = {
-    "Arrays & Strings": {
-      title: "Two Sum",
-      topicLabel: "Arrays & Strings",
-      difficulty: "Easy",
-      explanation:
-        "Given an array of integers nums and an integer target, return the indices of the two numbers such that they add up to target.",
-      exampleInput: "nums = [2, 7, 11, 15], target = 9",
-      exampleOutput: "[0, 1]",
-      testCases: [
-        "[2,7,11,15], 9 → [0,1]",
-        "[3,2,4], 6 → [1,2]",
-        "[3,3], 6 → [0,1]"
-      ],
-      starterCode: `class Solution {
-    public int[] twoSum(int[] nums, int target) {
+  const currentProblem = problem ? {
+    title: problem.title || "Untitled Problem",
+    topicLabel: topic,
+    difficulty: problem.problemDifficulty || problem.difficulty || "UNKNOWN",
+    explanation: problem.prompt || problem.description || "No explanation available.",
+    exampleInput: problem.examples || "No sample input available.",
+    exampleOutput: problem.sampleExpectedOutput || "",
+    starterCode: problem.starterCode || ""
+  } : null;
 
-    }
-}`
-    },
-
-    "Two Pointers": {
-      title: "Valid Palindrome",
-      topicLabel: "Two Pointers",
-      difficulty: "Easy",
-      explanation:
-        "Given a string s, return true if it is a palindrome after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters.",
-      exampleInput: `s = "A man, a plan, a canal: Panama"`,
-      exampleOutput: "true",
-      testCases: [
-        `"A man, a plan, a canal: Panama" → true`,
-        `"race a car" → false`,
-        `" " → true`
-      ],
-      starterCode: `class Solution {
-    public boolean isPalindrome(String s) {
-
-    }
-}`
-    },
-
-    "Hash Maps": {
-      title: "Contains Duplicate",
-      topicLabel: "Hash Maps",
-      difficulty: "Easy",
-      explanation:
-        "Given an integer array nums, return true if any value appears at least twice in the array, and return false if every element is distinct.",
-      exampleInput: "nums = [1, 2, 3, 1]",
-      exampleOutput: "true",
-      testCases: [
-        "[1,2,3,1] → true",
-        "[1,2,3,4] → false",
-        "[1,1,1,3,3,4,3,2,4,2] → true"
-      ],
-      starterCode: `class Solution {
-    public boolean containsDuplicate(int[] nums) {
-
-    }
-}`
-    }
-  };
-
-  const fallbackProblem =
-    problemData[topic || "Arrays & Strings"] || problemData["Arrays & Strings"];
-
-  const currentProblem = problem
-    ? {
-        title: problem.title || "Problem Title",
-        topicLabel: topic ?? `Category ${problem.category || ""}`,
-        difficulty: problem.problemDifficulty || "UNKNOWN",
-        explanation: problem.prompt || "Problem prompt unavailable.",
-        exampleInput: problem.examples || "No examples available.",
-        exampleOutput: "",
-        starterCode: problem.starterCode || `class Solution {
-
-}`
-      }
-    : fallbackProblem;
-
-  const sampleTestCasesText =
-    problem && typeof problem.sampleTestCase === "string" && problem.sampleTestCase.trim().length > 0
-      ? problem.sampleTestCase
-      : "No test cases available.";
+  const sampleTestCasesText = problem?.sampleTestCase || problem?.examples || "";
 
   const resolvedUserId = userId;
-  const resolvedCategoryId = problem?.category ?? null;
+  const resolvedCategoryId = problem?.category;
 
   const [code, setCode] = useState(currentProblem.starterCode);
   const [output, setOutput] = useState("Output will appear here when submitted.");
@@ -150,26 +78,35 @@ export default function ProblemPage({ topic, problem, goBack, userId, onSubmit }
         }),
       });
 
-      const raw = await res.text();
-      let data;
-      try {
-        data = JSON.parse(raw);
-      } catch {
-        data = { raw };
-      }
+      const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(typeof data === "string" ? data : JSON.stringify(data) || "Failed to submit solution");
+        throw new Error(data?.message || "Failed to submit solution");
       }
 
-      setOutput(typeof data === "string" ? data : JSON.stringify(data));
+      const passed = data.passed;
+      const total = data.total;
+      const grade = data.color;
+      const scoreValue = data.score;
+      const score = typeof scoreValue === "number"
+        ? `${Math.round(scoreValue * 100)}%`
+        : scoreValue;
+      const runTimeMs = data.runTimeMs;
+      const runTimeMessage = data.runTimeMessage;
 
-      // Normalize results shape for ResultsPage
       const formattedResults = {
-        passed: data.passed ?? 0,
-        total: data.total ?? 0,
-        testCases: data.testCases ?? []
+        grade,
+        passed,
+        total,
+        score,
+        runTimeMs,
+        runTimeMessage,
+        failedCases: data.failedCases,
+        error: data.error,
+        message: data.message ?? "Submission saved. Your progress has been updated."
       };
+
+      setOutput(`Finished grading. Passed ${passed} / ${total} test cases.\nColor Grade: ${grade}`);
 
       if (onSubmit) {
         onSubmit(formattedResults);
@@ -178,9 +115,6 @@ export default function ProblemPage({ topic, problem, goBack, userId, onSubmit }
       const message = err.message || "Submit failed";
       setError(message);
       setOutput(message);
-      if (onSubmit) {
-        onSubmit({ passed: 0, total: 0, testCases: [] });
-      }
     }
   }
 

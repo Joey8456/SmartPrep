@@ -1,13 +1,15 @@
 import "./ResultsPage.css";
 
 export default function ResultsPage({ result, goBack }) {
-  const grade = result?.grade || result?.rating || result?.color || "GREEN";
-  const passed = result?.passed ?? "--";
-  const total = result?.total ?? "--";
-  const runtime = result?.runtimeMs ?? "--";
-  const runtimeLogic = result?.runtimeLogic || "Good";
-  const score = result?.score ?? "--";
+  const grade = result.grade;
+  const passed = result.passed;
+  const total = result.total;
+  const runTimeMs = result.runTimeMs;
+  const runtimeLogic = result.runTimeMessage;
+  const score = result.score
 
+  const failedCases = result.failedCases;
+  const message = result?.message || "Submission saved. Your progress has been updated.";
   const gradeKey = String(grade).toLowerCase();
 
   const gradeStyles = {
@@ -35,9 +37,7 @@ export default function ResultsPage({ result, goBack }) {
           <h1>
             Grade: <span className="grade-text">{style.label}</span>
           </h1>
-          <p className="results-message">
-            Submission saved. Your progress has been updated.
-          </p>
+          <p className="results-message">{message}</p>
         </div>
 
         <div className="results-grid">
@@ -53,7 +53,7 @@ export default function ResultsPage({ result, goBack }) {
 
           <div className="results-feedback runtime-block">
             <h3>Runtime</h3>
-            <p className="runtime-main">{runtime} ms</p>
+            <p className="runtime-main">{runTimeMs} ms</p>
             <p className="runtime-logic-text">
               {runtimeLogic === "Good" ? "Runs Good!" : "Runs Poorly"}
             </p>
@@ -62,9 +62,17 @@ export default function ResultsPage({ result, goBack }) {
 
         <div className="results-feedback">
           <h3>Feedback</h3>
-          <p>
-            Detailed submission insights will appear here once backend is connected.
-          </p>
+          {failedCases.length === 0 ? (
+            <p>No failed test cases. Clean submission.</p>
+          ) : (
+            <div>
+              {failedCases.map((tc, i) => (
+                <div key={tc.testId || i}>
+                  Test Case {tc.testId || i + 1} failed
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <button className="results-btn" onClick={goBack}>

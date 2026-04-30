@@ -1,9 +1,12 @@
 package com.BTA.SmartPrep.controller;
 
 import com.BTA.SmartPrep.domain.dto.problem.SolutionRequestDto;
+import com.BTA.SmartPrep.domain.dto.problem.SolutionSubmissionDto;
 import com.BTA.SmartPrep.service.SolutionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -17,9 +20,9 @@ public class SolutionController {
 
 
     @PostMapping
-    public ResponseEntity<String> getSolution(@RequestBody SolutionRequestDto requestDto) {
+    public ResponseEntity<SolutionSubmissionDto> getSolution(@RequestBody SolutionRequestDto requestDto) {
         try {
-            String grade = solutionService.solutionGrade(
+            SolutionSubmissionDto grade = solutionService.solutionGrade(
                     requestDto.codeString(),
                     requestDto.problemId(),
                     requestDto.userId(),
@@ -27,7 +30,9 @@ public class SolutionController {
             );
             return ResponseEntity.ok(grade);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    new SolutionSubmissionDto("red", 0, 0, 0.0f, new ArrayList<>(), "Error",0,"")
+            );
         }
     }
 
