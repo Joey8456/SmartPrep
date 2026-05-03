@@ -1,29 +1,34 @@
-# SmartPrep
+
+SmartPrep
+
 Capstone Final Project
 
-## Prerequisites
-- Java 17
-- Maven
-- IntelliJ IDEA (or any IDE)
+Overview
 
-## Setup Instructions
-1. Clone the repository
-2. Open in IntelliJ (File → Open → select project folder)
-3. Wait for Maven to download dependencies
-4. Run the main application class
-5. Access at http://localhost:8080
+SmartPrep is a platform that helps users practice coding and interview-style questions based on their skill level. It evaluates solutions, tracks proficiency, and adapts problem difficulty to create an effective learning experience.
 
-## Database
-- Development: H2 (in-memory)
-- Production: MySQL
+Prerequisites
 
-## API Endpoints
-(Add these as you build them)
-- GET /api/trips - Get all trips
-- POST /api/purchases - Create purchase
-- etc.
+* Java 17+
+* Maven
+* IntelliJ IDEA (or any Java IDE)
+* Node.js & npm (for frontend)
 
-## Team Members
-- Joey
-- Abraham
-- Ibrahim
+Database
+* Production: MySQL (configure in application.properties if needed)
+
+Features
+
+* User proficiency tracking
+* Adaptive problem difficulty
+* Code execution with test case validation
+* Runtime measurement
+* AI chatbot evaluation system
+
+Team Members
+
+* Joey
+* Abraham
+* Ibrahim
+
+⸻
