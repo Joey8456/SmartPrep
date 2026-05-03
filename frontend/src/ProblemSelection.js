@@ -10,7 +10,7 @@ export default function ProblemSelection({ goToProblemPage, goBack, goToChatbot 
   const [proficiencies, setProficiencies] = useState({});
 
   useEffect(() => {
-    const userId = user?.userId;
+    const userId = user.userId;
 
     if (!userId) {
       return;

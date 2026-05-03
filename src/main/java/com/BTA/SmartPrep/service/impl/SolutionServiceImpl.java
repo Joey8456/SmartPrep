@@ -90,7 +90,7 @@ public class SolutionServiceImpl implements SolutionService {
                         " | Actual: " + formatActualOutput(actual));
             }
             String runtimeLogic = "";
-            if (runTimeMs <= 100) {
+            if (runTimeMs <= 5) {
                 runtimeLogic = "Good";
             } else {
                 runtimeLogic = "Poor";
@@ -111,7 +111,7 @@ public class SolutionServiceImpl implements SolutionService {
                     color = "green";
                 }
             }
-            else if (score < 100 && score >= 75) {
+            else if (score < 1.0 && score >= .75) {
                 profficiencyChange = 3;
                 color = "yellow";
             }
@@ -120,8 +120,7 @@ public class SolutionServiceImpl implements SolutionService {
                 color = "red";
             }
 
-
-
+            System.out.println(color);
             UpdateProfficiencyRequest updateProfficiencyRequest = new UpdateProfficiencyRequest(userId,categoryId,profficiencyChange);
             profficiencyService.updateProfficiency(updateProfficiencyRequest);
             SolutionSubmissionDto solutionSubmissionDto = new SolutionSubmissionDto(color,passedCount,testCases.size(),score,failedCases, message,runTimeMs,runtimeLogic);

@@ -5,21 +5,19 @@ import Editor from "@monaco-editor/react";
 
 export default function ProblemPage({ topic, problem, goBack, userId, onSubmit }) {
   const [error, setError] = useState("");
-  const currentProblem = problem ? {
-    title: problem.title || "Untitled Problem",
+  const currentProblem = {
+    title: problem.title,
     topicLabel: topic,
-    difficulty: problem.problemDifficulty || problem.difficulty || "UNKNOWN",
-    explanation: problem.prompt || problem.description || "No explanation available.",
-    exampleInput: problem.examples || "No sample input available.",
-    exampleOutput: problem.sampleExpectedOutput || "",
-    starterCode: problem.starterCode || ""
-  } : null;
+    difficulty: problem.problemDifficulty || problem.difficulty,
+    explanation: problem.prompt || problem.description,
+    exampleInput: problem.examples,
+    exampleOutput: problem.sampleExpectedOutput,
+    starterCode: problem.starterCode
+  };
 
-  const sampleTestCasesText = problem?.sampleTestCase || problem?.examples || "";
-
+  const sampleTestCasesText = problem.sampleTestCase;
   const resolvedUserId = userId;
-  const resolvedCategoryId = problem?.category;
-
+  const resolvedCategoryId = problem.category;
   const [code, setCode] = useState(currentProblem.starterCode);
   const [output, setOutput] = useState("Output will appear here when submitted.");
   const [resultStatus, setResultStatus] = useState(null); // "red" | "yellow" | "green" | null

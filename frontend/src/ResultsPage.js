@@ -9,7 +9,7 @@ export default function ResultsPage({ result, goBack }) {
   const score = result.score
 
   const failedCases = result.failedCases;
-  const message = result?.message || "Submission saved. Your progress has been updated.";
+  const message = "Submission saved. Your progress has been updated.";
   const gradeKey = String(grade).toLowerCase();
 
   const gradeStyles = {
@@ -27,7 +27,7 @@ export default function ResultsPage({ result, goBack }) {
     }
   };
 
-  const style = gradeStyles[gradeKey] || gradeStyles.green;
+  const style = gradeStyles[gradeKey];
 
   return (
     <main className="results-shell">
